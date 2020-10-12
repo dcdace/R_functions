@@ -181,9 +181,6 @@ rm_2by2_anova <- function(data, columns, param) {
                                         plot.qq,
                                         nrow = 1,
                                         rel_widths = c(1 / 4, 3 / 4))
-  
-  print(results$plot.assumption.checks)
-  
   # ----------------------------------------------------------------------
   # Within-Subject descriptive summary
   # ----------------------------------------------------------------------
