@@ -181,6 +181,7 @@ rm_2by2_anova <- function(data, columns, param) {
                                         plot.qq,
                                         nrow = 1,
                                         rel_widths = c(1 / 4, 3 / 4))
+  
   # ----------------------------------------------------------------------
   # Within-Subject descriptive summary
   # ----------------------------------------------------------------------
@@ -326,12 +327,6 @@ rm_2by2_anova <- function(data, columns, param) {
            stars.pval(results$one.way2$p),
            "n.s.")
   
-  # post-hoc pairwise comparisons for each Fc1 level between the Fc2 levels
-  p.Fc1.L1 <-
-    ifelse(results$pwc1$p[1] < 0.05, stars.pval(results$pwc1$p[1]), "n.s.")
-  p.Fc1.L2 <-
-    ifelse(results$pwc1$p[2] < 0.05, stars.pval(results$pwc1$p[2]), "n.s.")
-  
   # plot main title and factor labels (with added significance stars)
   plot.title <- sprintf('%s %s', param$title, p.anova)
   Fc1.title <- sprintf('%s %s:', param$Fc1.label, p.mainFc1)
@@ -374,24 +369,6 @@ rm_2by2_anova <- function(data, columns, param) {
     labs(x = Fc2.title, y = param$y.label) +
     ggtitle(plot.title) +
     
-    # add post-hoc pairwise comparisons
-    # might need to adjust the x and y positions
-    annotate(
-      "text",
-      x = 1.30,
-      y = mean(results$dataSummary$meanDV),
-      label = p.Fc1.L1,
-      color = param$cat.color[1],
-      size = 8
-    ) +
-    annotate(
-      "text",
-      x = 1.7,
-      y = mean(results$dataSummary$meanDV),
-      label = p.Fc1.L2,
-      color = param$cat.color[2],
-      size = 8
-    )  +
     
     # make it nicer
     theme_minimal() +
