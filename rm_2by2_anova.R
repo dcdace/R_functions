@@ -62,7 +62,6 @@ rm_2by2_anova <- function(data, columns, param) {
   library(gtools)    # for converting pvalues to stars
   library(rstatix)   # for pairwise ttests
   
-  
   # the plot title
   param$title <-
     sprintf('%s x %s interaction', param$Fc2.label, param$Fc1.label)
@@ -71,7 +70,6 @@ rm_2by2_anova <- function(data, columns, param) {
   # Results list to store results
   # ----------------------------------------------------------------------
   results <- list()
-  
   
   # ----------------------------------------------------------------------
   # Prepare the dataset
