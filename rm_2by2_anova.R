@@ -375,10 +375,10 @@ rm_2by2_anova <- function(data, columns, param) {
     # make it nicer
     theme_minimal() +
     theme(
-      text = element_text(size = 20),
+      text = element_text(size = 16),
       plot.title = element_text(
         hjust = 0.5,
-        size = 20,
+        size = 16,
         face = "bold"
       ),
       panel.grid.major = element_blank(),
