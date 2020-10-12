@@ -24,14 +24,14 @@
 #                                        Fc2.label  = "Emotion",
 #                                        cat.color  = c('#DF4A56', '#5284a8')
 #                                           )
-#                        parameters$title <- sprintf('%s x %s interaction', param$Fc2.label, param$Fc1.label)
+#                        parameters$title <- sprintf('%s x %s interaction', parameters$Fc2.label, parameters$Fc1.label)
 #
 # OUTPUT DATA: a list of result items
 #          outliers               - results of identify_outliers function
 #          normality              - results of shapiro_test
 #          plot.assumption.checks - boxplots and QQ plots in one plot
 #          dataSummary            - Within-Subject descriptive summary of all 4 levels
-#          anova                  - ANOVA results of aov function
+#          res.anova              - ANOVA results of aov function
 #          one.way1               - Factor 1 Main effect results of anova_test function 
 #          one.way2               - Factor 2 Main effect results of anova_test function 
 #          pwc1                   - Pairwise comparisons grouped by Factor 1
@@ -80,6 +80,11 @@ rm_2by2_anova <- function(data, columns, param) {
               .(sID, Fc1, Fc2),
               summarise,
               meanDV = mean(DV, na.rm = TRUE))
+  
+  # sID, Fc1 and Fc2 must be factors
+  df$sID <- as.factor(df$sID)
+  df$Fc1 <- as.factor(df$Fc1)
+  df$Fc2 <- as.factor(df$Fc2)
   
   # ----------------------------------------------------------------------
   # CHECK ASSUMPTIONS
