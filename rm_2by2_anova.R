@@ -16,7 +16,7 @@
 #                                     Fc2 = "Emotion_Condition")
 #                    
 #      - param: list of parameters
-#                    Must contain y.label, Fc1.label, Fc2.label, cat.color  
+#                    Must contain y.label, Fc1.label, Fc2.label, title, cat.color  
 #                    For example:
 #                        parameters <- list(
 #                                        y.label    = "Subjective Valence",
@@ -24,6 +24,7 @@
 #                                        Fc2.label  = "Emotion",
 #                                        cat.color  = c('#DF4A56', '#5284a8')
 #                                           )
+#                        parameters$title <- sprintf('%s x %s interaction', param$Fc2.label, param$Fc1.label)
 #
 # OUTPUT DATA: a list of result items
 #          outliers               - results of identify_outliers function
@@ -61,10 +62,6 @@ rm_2by2_anova <- function(data, columns, param) {
   library(cowplot)   # for adding plots together and setting different widths
   library(gtools)    # for converting pvalues to stars
   library(rstatix)   # for pairwise ttests
-  
-  # the plot title
-  param$title <-
-    sprintf('%s x %s interaction', param$Fc2.label, param$Fc1.label)
   
   # ----------------------------------------------------------------------
   # Results list to store results
