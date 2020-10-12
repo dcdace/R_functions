@@ -15,7 +15,7 @@
 #                                     Fc1 = "Item_Category",
 #                                     Fc2 = "Emotion_Condition")
 #                    
-#      - parameters: list of parameters
+#      - param: list of parameters
 #                    Must contain y.label, Fc1.label, Fc2.label, cat.color  
 #                    For example:
 #                        parameters <- list(
@@ -50,9 +50,7 @@
 #                 
 # ===================================================================================
 
-rm_2by2_anova <- function(data, columns, parameters) {
-  
-  param <- parameters
+rm_2by2_anova <- function(data, columns, param) {
   
   # ----------------------------------------------------------------------
   # LIBRARIES
@@ -64,6 +62,10 @@ rm_2by2_anova <- function(data, columns, parameters) {
   library(gtools)    # for converting pvalues to stars
   library(rstatix)   # for pairwise ttests
   
+  
+  # the plot title
+  param$title <-
+    sprintf('%s x %s interaction', param$Fc2.label, param$Fc1.label)
   
   # ----------------------------------------------------------------------
   # Results list to store results
