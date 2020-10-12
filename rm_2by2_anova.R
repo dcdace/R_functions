@@ -84,7 +84,7 @@ rm_2by2_anova <- function(data, columns, param) {
   # sID, Fc1 and Fc2 must be factors
   df$sID <- as.factor(df$sID)
   df$Fc1 <- as.factor(df$Fc1)
-  df$Fc2 <- as.factor(df$Fc2)
+  df$Fc2 < as.factor(df$Fc2)
   
   # ----------------------------------------------------------------------
   # CHECK ASSUMPTIONS
@@ -375,10 +375,10 @@ rm_2by2_anova <- function(data, columns, param) {
     # make it nicer
     theme_minimal() +
     theme(
-      text = element_text(size = 16),
+      text = element_text(size = 20),
       plot.title = element_text(
         hjust = 0.5,
-        size = 16,
+        size = 20,
         face = "bold"
       ),
       panel.grid.major = element_blank(),
