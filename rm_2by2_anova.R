@@ -1,4 +1,3 @@
-
 # ===================================================================================
 # Dace Apsvalka, October, 2020, www.dcdace.net
 # ===================================================================================
@@ -72,7 +71,8 @@ rm_2by2_anova <- function(data, columns, param) {
   # Prepare the dataset
   # ----------------------------------------------------------------------
   # Subset the dataset to only the columns of interest
-  data_subset <- data %>% select(all_of(unlist(columns)))
+  # Because dplyr::select function clashes with MASS::select need to specify to use dplyr:: select
+  data_subset <- dataset %>% dplyr::select(all_of(unlist(columns)))
   
   # Average same Factor/Level values for each subject if there are several.
   # Will use this data frame df for the rest of the results and plots
@@ -180,9 +180,9 @@ rm_2by2_anova <- function(data, columns, param) {
   
   # Add result texts as titles for each plot
   results$plot.assumption.checks <- plot_grid(plot.box,
-                                        plot.qq,
-                                        nrow = 1,
-                                        rel_widths = c(1 / 4, 3 / 4))
+                                              plot.qq,
+                                              nrow = 1,
+                                              rel_widths = c(1 / 4, 3 / 4))
   
   # ----------------------------------------------------------------------
   # Within-Subject descriptive summary
