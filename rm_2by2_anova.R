@@ -15,13 +15,14 @@
 #                                     Fc2 = "Emotion_Condition")
 #                    
 #      - param: list of parameters
-#                    Must contain y.label, Fc1.label, Fc2.label, title, cat.color  
+#                    Must contain y.label, Fc1.label, Fc2.label, title, cat.color, errorbar  
 #                    For example:
 #                        parameters <- list(
 #                                        y.label    = "Subjective Valence",
 #                                        Fc1.label  = "Item",
 #                                        Fc2.label  = "Emotion",
-#                                        cat.color  = c('#DF4A56', '#5284a8')
+#                                        cat.color  = c('#DF4A56', '#5284a8'),
+#                                        errorbar   = "ci"  # can be either sd, se, or ci
 #                                           )
 #                        parameters$title <- sprintf('%s x %s interaction', parameters$Fc2.label, parameters$Fc1.label)
 #
@@ -353,8 +354,8 @@ rm_2by2_anova <- function(data, columns, param) {
       data = results$dataSummary,
       aes(
         y = meanDV,
-        ymin = meanDV - ci,
-        ymax = meanDV + ci,
+        ymin = meanDV - .data[[param$errorbar]],
+        ymax = meanDV + .data[[param$errorbar]],
         color = Fc1
       ),
       size = 1,
