@@ -301,7 +301,7 @@ rm_2by2_anova <- function(data, columns, param) {
   
   results$pwc1 <- df %>%
     group_by(Fc1) %>%
-    pairwise_t_test(meanDV ~ Fc2, paired = TRUE)
+    pairwise_t_test(meanDV ~ Fc2, paired = TRUE,  p.adjust.method = "bonferroni")
   print(results$pwc1)
   
   cat('\n\n-----------------------------------------------\n\n')
@@ -311,7 +311,7 @@ rm_2by2_anova <- function(data, columns, param) {
   
   results$pwc2 <- df %>%
     group_by(Fc2) %>%
-    pairwise_t_test(meanDV ~ Fc1, paired = TRUE)
+    pairwise_t_test(meanDV ~ Fc1, paired = TRUE, p.adjust.method = "bonferroni")
   print(results$pwc2)
   
   # ----------------------------------------------------------------------
