@@ -283,7 +283,7 @@ rm_2by2_anova <- function(data, columns, param) {
   sign.Fc2 <-
     ifelse(res.Fc2.pval < 0.05, "Significant", "No significant")
   
-  results$res.txt.Fc1 <- sprintf(
+  results$res.txt.Fc2 <- sprintf(
     'Main effect of %s: F(%d,%d) = %.2f, p = %.7f',
     param$Fc2.label,
     summary.anova[["Error: sID:Fc2"]][[1]][["Df"]][1],
