@@ -259,7 +259,7 @@ rm_2by2_anova <- function(data, columns, param) {
     ifelse(res.Fc1.pval < 0.05, "Significant", "No significant")
   
   res.txt.Fc1 <- sprintf(
-    '\n%s main effect of %s on %s \n\n: F(%d,%d) = %.2f, p = %.3f\n',
+    '\n%s main effect of %s on %s: F(%d,%d) = %.2f, p = %.3f\n',
     sign.Fc1,
     columns$Fc1, columns$DV,
     summary.anova[["Error: sID:Fc1"]][[1]][["Df"]][1],
@@ -284,7 +284,7 @@ rm_2by2_anova <- function(data, columns, param) {
     ifelse(res.Fc2.pval < 0.05, "Significant", "No significant")
   
   res.txt.Fc2 <- sprintf(
-    '\n%s main effect of %s on %s \n\n: F(%d,%d) = %.2f, p = %.3f\n',
+    '\n%s main effect of %s on %s: F(%d,%d) = %.2f, p = %.3f\n',
     sign.Fc2,
     columns$Fc2, columns$DV,
     summary.anova[["Error: sID:Fc2"]][[1]][["Df"]][1],
