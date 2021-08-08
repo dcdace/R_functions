@@ -32,8 +32,8 @@
 #          plot.assumption.checks - boxplots and QQ plots in one plot
 #          dataSummary            - Within-Subject descriptive summary of all 4 levels
 #          res.anova              - ANOVA results of aov function
-#          one.way1               - Factor 1 Main effect results of anova_test function 
-#          one.way2               - Factor 2 Main effect results of anova_test function 
+#          main.Fc1               - Factor 1 Main effect 
+#          main.Fc2               - Factor 2 Main effect  
 #          pwc1                   - Pairwise comparisons grouped by Factor 1
 #          pwc2                   - Pairwise comparisons grouped by Factor 2
 #          plot.anova             - the results plot
@@ -258,7 +258,7 @@ rm_2by2_anova <- function(data, columns, param) {
   sign.Fc1 <-
     ifelse(res.Fc1.pval < 0.05, "Significant", "No significant")
   
-  res.txt.Fc1 <- sprintf(
+  main.Fc1 <- sprintf(
     '\n%s main effect of %s on %s: F(%d,%d) = %.2f, p = %.3f\n',
     sign.Fc1,
     columns$Fc1, columns$DV,
@@ -270,7 +270,7 @@ rm_2by2_anova <- function(data, columns, param) {
   
   # display the result sentence
   
-  cat(res.txt.Fc1)
+  cat(main.Fc1)
   
   
   cat('\n\n-----------------------------------------------\n')
@@ -283,7 +283,7 @@ rm_2by2_anova <- function(data, columns, param) {
   sign.Fc2 <-
     ifelse(res.Fc2.pval < 0.05, "Significant", "No significant")
   
-  res.txt.Fc2 <- sprintf(
+  main.Fc2 <- sprintf(
     '\n%s main effect of %s on %s: F(%d,%d) = %.2f, p = %.3f\n',
     sign.Fc2,
     columns$Fc2, columns$DV,
@@ -295,7 +295,7 @@ rm_2by2_anova <- function(data, columns, param) {
   
   # display the result sentence
   
-  cat(res.txt.Fc2)
+  cat(main.Fc2)
   
   
   cat('\n================================================================\n\n')
