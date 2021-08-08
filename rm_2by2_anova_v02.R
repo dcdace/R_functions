@@ -258,7 +258,7 @@ rm_2by2_anova <- function(data, columns, param) {
   sign.Fc1 <-
     ifelse(res.Fc1.pval < 0.05, "Significant", "No significant")
   
-  main.Fc1 <- sprintf(
+  results$main.Fc1 <- sprintf(
     '\n%s main effect of %s on %s: F(%d,%d) = %.2f, p = %.3f\n',
     sign.Fc1,
     columns$Fc1, columns$DV,
@@ -270,7 +270,7 @@ rm_2by2_anova <- function(data, columns, param) {
   
   # display the result sentence
   
-  cat(main.Fc1)
+  cat(results$main.Fc1)
   
   
   cat('\n\n-----------------------------------------------\n')
@@ -283,7 +283,7 @@ rm_2by2_anova <- function(data, columns, param) {
   sign.Fc2 <-
     ifelse(res.Fc2.pval < 0.05, "Significant", "No significant")
   
-  main.Fc2 <- sprintf(
+  results$main.Fc2 <- sprintf(
     '\n%s main effect of %s on %s: F(%d,%d) = %.2f, p = %.3f\n',
     sign.Fc2,
     columns$Fc2, columns$DV,
@@ -295,7 +295,7 @@ rm_2by2_anova <- function(data, columns, param) {
   
   # display the result sentence
   
-  cat(main.Fc2)
+  cat(results$main.Fc2)
   
   
   cat('\n================================================================\n\n')
