@@ -231,7 +231,7 @@ rm_2by2_anova <- function(data, columns, param) {
     ifelse(res.anova.pval < 0.05, "Significant", "No significant")
   
   results$res.txt.anova <- sprintf(
-    '\n%s %s: F(%d,%d) = %.2f, p = %.3f\n',
+    '\n%s %s: F(%d,%d) = %.2f, p = %.7f\n',
     sign.anova,
     param$title,
     summary.anova[["Error: sID:Fc1:Fc2"]][[1]][["Df"]][1],
@@ -260,7 +260,7 @@ rm_2by2_anova <- function(data, columns, param) {
     ifelse(res.Fc1.pval < 0.05, "Significant", "No significant")
   
   results$res.txt.Fc1 <- sprintf(
-    'Main effect of %s: F(%d,%d) = %.2f, p = %.7f',
+    'Main effect of %s: F(%d,%d) = %.2f, p = %.7f\n',
     param$Fc1.label,
     summary.anova[["Error: sID:Fc1"]][[1]][["Df"]][1],
     summary.anova[["Error: sID:Fc1"]][[1]][["Df"]][2],
@@ -284,7 +284,7 @@ rm_2by2_anova <- function(data, columns, param) {
     ifelse(res.Fc2.pval < 0.05, "Significant", "No significant")
   
   results$res.txt.Fc2 <- sprintf(
-    'Main effect of %s: F(%d,%d) = %.2f, p = %.7f',
+    'Main effect of %s: F(%d,%d) = %.2f, p = %.7f\n',
     param$Fc2.label,
     summary.anova[["Error: sID:Fc2"]][[1]][["Df"]][1],
     summary.anova[["Error: sID:Fc2"]][[1]][["Df"]][2],
