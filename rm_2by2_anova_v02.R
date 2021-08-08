@@ -32,8 +32,9 @@
 #          plot.assumption.checks - boxplots and QQ plots in one plot
 #          dataSummary            - Within-Subject descriptive summary of all 4 levels
 #          res.anova              - ANOVA results of aov function
-#          main.Fc1               - Factor 1 Main effect 
-#          main.Fc2               - Factor 2 Main effect  
+#          res.txt.anova          - Formatted ANOVA results 
+#          res.txt.Fc1            - Formatted Factor 1 Main effect 
+#          res.txt.Fc2            - Formatted Factor 2 Main effect  
 #          pwc1                   - Pairwise comparisons grouped by Factor 1
 #          pwc2                   - Pairwise comparisons grouped by Factor 2
 #          plot.anova             - the results plot
@@ -229,7 +230,7 @@ rm_2by2_anova <- function(data, columns, param) {
   sign.anova <-
     ifelse(res.anova.pval < 0.05, "Significant", "No significant")
   
-  res.txt.anova <- sprintf(
+  results$res.txt.anova <- sprintf(
     '\n%s %s: F(%d,%d) = %.2f, p = %.3f\n',
     sign.anova,
     param$title,
@@ -239,7 +240,7 @@ rm_2by2_anova <- function(data, columns, param) {
     res.anova.pval
   )
   
-  cat(res.txt.anova)
+  cat(results$res.txt.anova)
   
   # ----------------------------------------------------------------------
   # Simple Main Effects of both factors
@@ -258,19 +259,18 @@ rm_2by2_anova <- function(data, columns, param) {
   sign.Fc1 <-
     ifelse(res.Fc1.pval < 0.05, "Significant", "No significant")
   
-  results$main.Fc1 <- sprintf(
-    '\n%s main effect of %s on %s: F(%d,%d) = %.2f, p = %.3f\n',
-    sign.Fc1,
-    columns$Fc1, columns$DV,
+  results$res.txt.Fc1 <- sprintf(
+    'Main effect of %s: F(%d,%d) = %.2f, p = %.7f',
+    param$Fc1.label,
     summary.anova[["Error: sID:Fc1"]][[1]][["Df"]][1],
     summary.anova[["Error: sID:Fc1"]][[1]][["Df"]][2],
     summary.anova[["Error: sID:Fc1"]][[1]][["F value"]][1],
-    res.Fc1.pval
+    summary.anova[["Error: sID:Fc1"]][[1]][["Pr(>F)"]][1]
   )
   
   # display the result sentence
   
-  cat(results$main.Fc1)
+  cat(results$res.txt.Fc1)
   
   
   cat('\n\n-----------------------------------------------\n')
@@ -283,19 +283,18 @@ rm_2by2_anova <- function(data, columns, param) {
   sign.Fc2 <-
     ifelse(res.Fc2.pval < 0.05, "Significant", "No significant")
   
-  results$main.Fc2 <- sprintf(
-    '\n%s main effect of %s on %s: F(%d,%d) = %.2f, p = %.3f\n',
-    sign.Fc2,
-    columns$Fc2, columns$DV,
+  results$res.txt.Fc1 <- sprintf(
+    'Main effect of %s: F(%d,%d) = %.2f, p = %.7f',
+    param$Fc2.label,
     summary.anova[["Error: sID:Fc2"]][[1]][["Df"]][1],
     summary.anova[["Error: sID:Fc2"]][[1]][["Df"]][2],
     summary.anova[["Error: sID:Fc2"]][[1]][["F value"]][1],
-    res.Fc2.pval
+    summary.anova[["Error: sID:Fc2"]][[1]][["Pr(>F)"]][1]
   )
   
   # display the result sentence
   
-  cat(results$main.Fc2)
+  cat(results$res.txt.Fc2)
   
   
   cat('\n================================================================\n\n')
