@@ -121,7 +121,7 @@ doCorrelation <- function(var1, var2, outliers) {
 
 # PLOT CORRELATIONS (with 95%CI)
 # ------------------------------------
-plotCorrelation <- function(var1, var2, var1name, var2name, resTXT, 
+plotCorrelation <- function(var1, var2, var1name, var2name, corRes, 
                             pointsize, txtsize, outliers = NULL, plotoutliers = FALSE) {
   if(!is.null(outliers) & length(outliers[[1]]) > 0) {
     out1 <- var1[outliers[[1]]]
@@ -134,27 +134,40 @@ plotCorrelation <- function(var1, var2, var1name, var2name, resTXT,
            addTxt <- sprintf('\n Outliers (n=%d) displayed in red',length(unique(outliers[[1]]))),
            addTxt <- sprintf('\n Outliers (n=%d) not displayed',length(unique(outliers[[1]])))
            )
-    resTXT <- bquote(atop(.(resTXT), .(addTxt)))      
-    #resTXT <- paste(resTXT, sprintf('\n Outliers (n=%d) not displayed',length(unique(outliers[[1]]))))        
+    resTXT <- bquote(atop(.(corRes[[1]]), .(addTxt)))       
   }
+    else {
+        resTXT <- corRes[[1]]
+    }
+    
+  if (corRes[[2]] < 0.05) {
+          titlecolor = 'black'
+          titleface = 'bold'
+          framecolor = 'red'
+      } else {
+          titlecolor = '#686868'
+          titleface = 'plain'
+          framecolor = "lightgrey"
+      }
   
   dataset <- data.frame(var1, var2)
 
   corplot <- ggplot(dataset, aes(var1, var2)) +
     geom_smooth(
       method = lm, formula = y ~ x, level = 0.95,
-      color = "black", fill = "grey", size = 0.2
+      color = "black", fill = "grey", size = 0.3
     ) +
     geom_point(
-      colour = "black", alpha = .9, fill = 'grey',
+      colour = "black", alpha = .8, fill = 'orange',
       size = pointsize, stroke = 0.2, shape = 21
     ) +    
     labs(x = var1name, y = var2name, title = resTXT) +     
     theme_minimal() + 
     theme(text = element_text(size = txtsize), 
-          plot.title = element_text(hjust = 0.5, size = 11, face="bold"), 
-          plot.background = element_rect(colour = "lightgrey", size = 0.4, linetype = "dotted"),
-          panel.grid.major = element_blank(), panel.grid.minor = element_blank() 
+          plot.title = element_text(hjust = 0.5, size = txtsize, face = titleface, color = titlecolor), 
+          plot.background = element_rect(colour = framecolor, size = 1),
+          panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank() 
           )
     
     if(!is.null(outliers) & length(outliers[[1]]) > 0 & plotoutliers == TRUE) {
