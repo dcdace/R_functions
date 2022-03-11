@@ -1,4 +1,5 @@
 library(ggplot2)
+library(Hmisc)   # for several stats things
 library(aplpack) # for bi-variate outlier, bgplot
 library(WRS2)    # for percentage bend correlation coefficient 
       # https://link-springer-com.ezp.lib.cam.ac.uk/content/pdf/10.1007/BF02294395.pdf
