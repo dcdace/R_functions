@@ -1,4 +1,5 @@
 install.packages("ggplot2")
+install.packages("Hmisc")
 install.packages('aplpack')
 install.packages(c("MASS", "akima", "robustbase"))
 install.packages(c("cobs", "robust", "mgcv", "scatterplot3d", "quantreg", "rrcov", "lars", "pwr", "trimcluster", "mc2d", "psych", "Rfit", "DepthProc", "class", "fda", "rankFD"))
