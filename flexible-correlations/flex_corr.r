@@ -1,9 +1,9 @@
-# library(ggplot2)
-# library(aplpack) # for bi-variate outlier, bgplot
-# library(WRS2)    # for percentage bend correlation coefficient 
-#       # https://link-springer-com.ezp.lib.cam.ac.uk/content/pdf/10.1007/BF02294395.pdf
-# library(WRS)     # for Wilcox correlation functions (skipped correlations)
-# library(MASS)    # WRS2 uses it. Its select function conflicts with dplyr select!
+library(ggplot2)
+library(aplpack) # for bi-variate outlier, bgplot
+library(WRS2)    # for percentage bend correlation coefficient 
+      # https://link-springer-com.ezp.lib.cam.ac.uk/content/pdf/10.1007/BF02294395.pdf
+library(WRS)     # for Wilcox correlation functions (skipped correlations)
+library(MASS)    # WRS2 uses it. Its select function conflicts with dplyr select!
 
 # GET OUTLIERS (from a variable pair, for correlations)
 # =======================================================
