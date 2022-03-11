@@ -67,7 +67,7 @@ get_outliers <-
     return(list(all, univariate, bivariate))
   }
 
-  # DO CORRELATIONS 
+# DO CORRELATIONS 
 # Depending on the data, 3 types of correlations possible. Following recommendations by Pernet et al.(2013)
 # =======================================================
 doCorrelation <- function(var1, var2, outliers) {
@@ -113,10 +113,10 @@ doCorrelation <- function(var1, var2, outliers) {
     subs <- ''  
   }
     
-  pval <- ifelse(p < 0.001, "p < 0.001", sprintf("p = %.3f", p))
+    pval <- ifelse(p < 0.001, "p < 0.001", sprintf("p = %.3f", p))
+    corResTxt <- bquote(.(f) ~ "correlation" ~ r[.(subs)] == .(sprintf("%.3f, %s", r, pval)))
     
-  corResTxt <- bquote(.(f) ~ "correlation" ~ r[.(subs)] == .(sprintf("%.3f, %s", r, pval)))
-  return(corResTxt)
+    return(list(corResTxt, p))
 }
 
 # PLOT CORRELATIONS (with 95%CI)
