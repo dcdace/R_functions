@@ -15,10 +15,14 @@ get_outliers <-
            disp = FALSE) {
     par(mfrow = c(1, 3)) # to put the 2 univariate and 1 bivariate plots together
     
-    if(!is.null(var1name){var1name = "var1"}
-    if(!is.null(var2name){var1name = "var2"}
-    if(!is.null(var1y){var1name = ""}
-    if(!is.null(var2y){var1name = ""}
+    if(!is.null(var1name)){
+      var1name = "var1"}
+    if(!is.null(var2name)){
+      var1name = "var2"}
+    if(!is.null(var1y)){
+      var1name = ""}
+    if(!is.null(var2y)){
+      var1name = ""}
 
     # UNIVARIATE, boxplot method
     # ------------------------------------
