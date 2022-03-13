@@ -9,11 +9,17 @@ library(MASS)    # WRS2 uses it. Its select function conflicts with dplyr select
 # GET OUTLIERS (from a variable pair, for correlations)
 # =======================================================
 get_outliers <-
-  function(var1,var1name,var1y,
-           var2,var2name,var2y,
-           disp) {
+  function(var1, var2, 
+           var1name = NULL,var1y = NULL,
+           var2name = NULL,var2y = NULL,
+           disp = FALSE) {
     par(mfrow = c(1, 3)) # to put the 2 univariate and 1 bivariate plots together
     
+    if(!is.null(var1name){var1name = "var1"}
+    if(!is.null(var2name){var1name = "var2"}
+    if(!is.null(var1y){var1name = ""}
+    if(!is.null(var2y){var1name = ""}
+
     # UNIVARIATE, boxplot method
     # ------------------------------------
     bpVar1 <- boxplot(var1,main = var1name,ylab = var1y,plot = disp)
@@ -70,7 +76,10 @@ get_outliers <-
 # DO CORRELATIONS 
 # Depending on the data, 3 types of correlations possible. Following recommendations by Pernet et al.(2013)
 # =======================================================
-doCorrelation <- function(var1, var2, outliers) {
+do_correlation<- function(var1, var2, outliers = NULL) {
+  if(is.null(outliers)){
+    outliers = get_outliers(var1,var2)
+    }
   # WHICH CORRELATION
   # ------------------------------------
   isOutliers   <- length(outliers[[1]]) > 0
@@ -121,7 +130,7 @@ doCorrelation <- function(var1, var2, outliers) {
 
 # PLOT CORRELATIONS (with 95%CI)
 # ------------------------------------
-plotCorrelation <- function(var1, var2, var1name, var2name, corRes, 
+plot_correlation <- function(var1, var2, var1name, var2name, corRes, 
                             pointsize, txtsize, outliers = NULL, plotoutliers = FALSE) {
   if(!is.null(outliers) & length(outliers[[1]]) > 0) {
     out1 <- var1[outliers[[1]]]
