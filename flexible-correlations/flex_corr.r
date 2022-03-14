@@ -182,7 +182,7 @@ plot_correlation <- function(var1, var2, #required
   }
 
   if (!is.null(plottitle)){
-    resTXT <- bquote(atop(.(plottitle), .(resTXT)))
+    resTXT <- paste(plottitle, '\n', resTXT) #bquote(atop(.(plottitle), .(resTXT)))
   }
 
   # If alpha not defined, set it to 0 (to ignore it)
