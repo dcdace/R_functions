@@ -135,7 +135,10 @@ do_correlation <- function(var1, var2, outliers = NULL) {
   pval <- ifelse(p < 0.001, "p < 0.001", sprintf("p = %.3f", p))
   corResTxt <- bquote(.(f) ~ "correlation" ~ r[.(subs)] == .(sprintf("%.3f, %s", r, pval)))
 
-  return(list(corResTxt, p))
+  return(
+    data.frame(
+      corResTxt, p, corRes
+      ))
 }
 
 # PLOT CORRELATIONS (with 95%CI)
