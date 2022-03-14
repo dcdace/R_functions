@@ -159,7 +159,7 @@ plot_correlation <- function(var1, var2, #required
   }
   # If correlation results not given, get them
   if (is.null(corRes)) {
-    do_correlation(var1, var2, outliers)
+    corRes <- do_correlation(var1, var2, outliers)
   }
   # format the output
   if (length(outliers[[1]]) > 0) {
