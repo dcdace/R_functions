@@ -152,7 +152,7 @@ plot_correlation <- function(var1, var2, #required
     var1name <- "var1"
   }
   if (is.null(var2name)) {
-    var1name <- "var2"
+    var2name <- "var2"
   }
   # If outliers not given, get them
   if (is.null(outliers)) {
