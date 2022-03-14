@@ -146,7 +146,7 @@ plot_correlation <- function(var1, var2, #required
   pointsize = 1.8, txtsize = 11, # default point and font size
   outliers = NULL,
   plotoutliers = FALSE, 
-  p-threshold = NULL) {
+  p_threshold = NULL) {
   # If lables not give, use these:
   if (is.null(var1name)) {
     var1name <- "var1"
@@ -181,8 +181,8 @@ plot_correlation <- function(var1, var2, #required
   }
 
   # If alpha not defined, set it to 0 (to ignore it)
-  if (is.null(p-threshold)) {
-    p-threshold <- 0
+  if (is.null(p_threshold)) {
+    p_threshold <- 0
   }
   if (corRes[[2]] < p-threshold) {
     titlecolor <- "black"
