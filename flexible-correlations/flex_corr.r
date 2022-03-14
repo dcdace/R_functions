@@ -147,13 +147,7 @@ plot_correlation <- function(var1, var2, #required
   outliers = NULL,
   plotoutliers = FALSE, 
   pthreshold = NULL) {
-  # If lables not give, use these:
-  if (is.null(var1name)) {
-    var1name <- [[var1]]
-  }
-  if (is.null(var2name)) {
-    var2name <- [[var2]]
-  }
+  
   # If outliers not given, get them
   if (is.null(outliers)) {
     outliers <- get_outliers(var1, var2)
