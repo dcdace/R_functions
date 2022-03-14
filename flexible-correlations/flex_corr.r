@@ -142,7 +142,6 @@ do_correlation <- function(var1, var2, outliers = NULL) {
 # ------------------------------------
 plot_correlation <- function(var1, var2, #required
   var1name = NULL, var2name = NULL, # axis lables
-  plottitle = NULL,
   corRes = NULL,
   pointsize = 1.8, txtsize = 11, # default point and font size
   outliers = NULL,
@@ -180,12 +179,7 @@ plot_correlation <- function(var1, var2, #required
   else {
     resTXT <- corRes[[1]]
   }
-
-  if (!is.null(plottitle)){
-    titletxt <- sprintf("\n %s", plottitle)
-    resTXT <- bquote(atop(.(titletxt), .(resTXT)))
-  }
-
+  
   # If alpha not defined, set it to 0 (to ignore it)
   if (is.null(pthreshold)) {
     pthreshold <- 0
@@ -209,7 +203,7 @@ plot_correlation <- function(var1, var2, #required
       colour = "black", alpha = .8, fill = "orange",
       size = pointsize, stroke = 0.2, shape = 21
     ) +
-    labs(x = var1name, y = var2name, title = resTXT) +
+    labs(x = var1name, y = var2name, subtitle = resTXT) +
     theme_minimal() +
     theme(text = element_text(size = txtsize),
           plot.title = element_text(hjust = 0.5, size = txtsize, face = titleface, color = "black"),
