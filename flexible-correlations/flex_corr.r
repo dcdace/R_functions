@@ -9,20 +9,20 @@ library(MASS) # WRS2 uses it. Its select function conflicts with dplyr select!
 # =======================================================
 get_outliers <-
   function(var1, var2, # required
-  var1name = NaN, var1y = NaN,
-  var2name = NaN, var2y = NaN,
+  var1name = NULL, var1y = NULL,
+  var2name = NULL, var2y = NULL,
   disp = FALSE) {
     # if labels are not defined, assign these:
-    if (is.NaN(var1name)) {
+    if (is.null(var1name)) {
       var1name <- "var1"
     }
-    if (is.NaN(var2name)) {
+    if (is.null(var2name)) {
       var1name <- "var2"
     }
-    if (is.NaN(var1y)) {
+    if (is.null(var1y)) {
       var1name <- ""
     }
-    if (is.NaN(var2y)) {
+    if (is.null(var2y)) {
       var1name <- ""
     }
 
@@ -85,9 +85,9 @@ get_outliers <-
 # DO CORRELATIONS 
 # Depending on the data, 3 types of correlations possible. Following recommendations by Pernet et al.(2013)
 # =======================================================
-do_correlation <- function(var1, var2, outliers = NaN) {
+do_correlation <- function(var1, var2, outliers = NULL) {
   # if outliers not provided, get them
-  if (is.NaN(outliers)) {
+  if (is.null(outliers)) {
     outliers <- get_outliers(var1, var2)
   }
   # WHICH CORRELATION
@@ -141,17 +141,20 @@ do_correlation <- function(var1, var2, outliers = NaN) {
 # PLOT CORRELATIONS (with 95%CI)
 # ------------------------------------
 plot_correlation <- function(var1, var2, #required
-  var1name = NaN, var2name = NaN, # axis lables
+  var1name = NULL, var2name = NULL, # axis lables
   corRes,
   pointsize = 1.8, txtsize = 11, # default point and font size
-  outliers = NaN,
+  outliers = NULL,
   plotoutliers = FALSE) {
   # if lables not give, use these:
-  if (is.NaN(var1name)) {
+  if (is.null(var1name)) {
     var1name <- "var1"
   }
+  if (is.null(var2name)) {
+    var1name <- "var2"
+  }
   # If outliers not given, get them
-  if (is.NaN(outliers)) {
+  if (is.null(outliers)) {
     outliers <- get_outliers(var1, var2)
   }
   # format the output
