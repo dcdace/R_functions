@@ -184,7 +184,7 @@ plot_correlation <- function(var1, var2, #required
   if (is.null(alpha)) {
     alpha <- 0
   }
-  if (corRes[[2]] < 0.05) {
+  if (corRes[[2]] < alpha) {
     titlecolor <- "black"
     titleface <- "bold"
     framecolor <- "red"
