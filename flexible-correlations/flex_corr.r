@@ -185,11 +185,9 @@ plot_correlation <- function(var1, var2, #required
     pthreshold <- 0
   }
   if (corRes[[2]] < pthreshold) {
-    titlecolor <- "black"
     titleface <- "bold"
     framecolor <- "red"
   } else {
-    titlecolor <- "#686868"
     titleface <- "plain"
     framecolor <- "lightgrey"
   }
@@ -208,7 +206,7 @@ plot_correlation <- function(var1, var2, #required
     labs(x = var1name, y = var2name, title = resTXT) +
     theme_minimal() +
     theme(text = element_text(size = txtsize),
-          plot.title = element_text(hjust = 0.5, size = txtsize, face = titleface, color = titlecolor),
+          plot.title = element_text(hjust = 0.5, size = txtsize, face = titleface, color = "black"),
           plot.background = element_rect(colour = framecolor, size = 1),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank()
