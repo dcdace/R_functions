@@ -142,6 +142,7 @@ do_correlation <- function(var1, var2, outliers = NULL) {
 # ------------------------------------
 plot_correlation <- function(var1, var2, #required
   var1name = NULL, var2name = NULL, # axis lables
+  title = NULL,
   corRes = NULL,
   pointsize = 1.8, txtsize = 11, # default point and font size
   outliers = NULL,
@@ -178,6 +179,10 @@ plot_correlation <- function(var1, var2, #required
   }
   else {
     resTXT <- corRes[[1]]
+  }
+
+  if (!is.null(title)){
+    resTXT >- bquote(atop(.(title, .(resTXT))))
   }
 
   # If alpha not defined, set it to 0 (to ignore it)
