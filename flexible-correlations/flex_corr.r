@@ -82,7 +82,7 @@ get_outliers <-
     return(list(all, univariate, bivariate))
   }
 
-# DO CORRELATIONS 
+# DO CORRELATIONS
 # Depending on the data, 3 types of correlations possible. Following recommendations by Pernet et al.(2013)
 # =======================================================
 do_correlation <- function(var1, var2, outliers = NULL) {
@@ -97,7 +97,7 @@ do_correlation <- function(var1, var2, outliers = NULL) {
   isBivariate <- length(outliers[[3]]) > 0
   isNormal <- (shapiro.test(var1)$p.value > 0.05 & shapiro.test(var2)$p.value > 0.05)
 
-  # if is Bivariate do Spearman skipped, using the minimum covariance determinant (MCD) estimator 
+  # if is Bivariate do Spearman skipped, using the minimum covariance determinant (MCD) estimator
   if (isBivariate) {
     # corRes <-
     #   scorci(var1,var2,nboot = 1000,corfun = spear,plotit = FALSE)
@@ -208,7 +208,7 @@ plot_correlation <- function(var1, var2, #required
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank()
           )
-  # if asked to display, add outliers on the plot        
+  # if asked to display, add outliers on the plot
   if (length(outliers[[1]]) > 0 & plotoutliers == TRUE) {
     corplot <- corplot + geom_point(data = outdata, aes(out1, out2), color = "red")
   }
