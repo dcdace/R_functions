@@ -145,8 +145,9 @@ plot_correlation <- function(var1, var2, #required
   corRes = NULL,
   pointsize = 1.8, txtsize = 11, # default point and font size
   outliers = NULL,
-  plotoutliers = FALSE) {
-  # if lables not give, use these:
+  plotoutliers = FALSE, 
+  alpha = NULL) {
+  # If lables not give, use these:
   if (is.null(var1name)) {
     var1name <- "var1"
   }
@@ -161,7 +162,7 @@ plot_correlation <- function(var1, var2, #required
   if (is.null(corRes)) {
     corRes <- do_correlation(var1, var2, outliers)
   }
-  # format the output
+  # Format the output
   if (length(outliers[[1]]) > 0) {
     out1 <- var1[outliers[[1]]]
     out2 <- var2[outliers[[1]]]
@@ -179,7 +180,7 @@ plot_correlation <- function(var1, var2, #required
     resTXT <- corRes[[1]]
   }
 
-  if (corRes[[2]] < 0.05) {
+  if (!is.null(alpha) & corRes[[2]] < alpha {
     titlecolor <- "black"
     titleface <- "bold"
     framecolor <- "red"
