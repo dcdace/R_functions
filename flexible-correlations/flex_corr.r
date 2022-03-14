@@ -180,7 +180,11 @@ plot_correlation <- function(var1, var2, #required
     resTXT <- corRes[[1]]
   }
 
-  if (!is.null(alpha) & corRes[[2]] < alpha) {
+  # If alpha not defined, set it to 0 (to ignore it)
+  if (is.null(alpha)) {
+    alpha <- 0
+  }
+  if (corRes[[2]] < 0.05) {
     titlecolor <- "black"
     titleface <- "bold"
     framecolor <- "red"
