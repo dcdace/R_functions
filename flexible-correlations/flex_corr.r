@@ -182,7 +182,8 @@ plot_correlation <- function(var1, var2, #required
   }
 
   if (!is.null(plottitle)){
-    resTXT <- bquote(atop(.(plottitle), .(resTXT)))
+    titletxt <- sprintf("\n %s", plottitle)
+    resTXT <- bquote(atop(.(titletxt), .(resTXT)))
   }
 
   # If alpha not defined, set it to 0 (to ignore it)
