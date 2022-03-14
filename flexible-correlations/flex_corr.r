@@ -142,7 +142,7 @@ do_correlation <- function(var1, var2, outliers = NULL) {
 # ------------------------------------
 plot_correlation <- function(var1, var2, #required
   var1name = NULL, var2name = NULL, # axis lables
-  corRes,
+  corRes = NULL,
   pointsize = 1.8, txtsize = 11, # default point and font size
   outliers = NULL,
   plotoutliers = FALSE) {
@@ -152,10 +152,14 @@ plot_correlation <- function(var1, var2, #required
   }
   if (is.null(var2name)) {
     var1name <- "var2"
-  }
+  }  
   # If outliers not given, get them
   if (is.null(outliers)) {
     outliers <- get_outliers(var1, var2)
+  }
+  # If correlation results not given, get them
+  if (is.null(corRes)) {
+    do_correlation(var1, var2, outliers)
   }
   # format the output
   if (length(outliers[[1]]) > 0) {
