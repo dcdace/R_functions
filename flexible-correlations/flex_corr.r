@@ -206,7 +206,7 @@ plot_correlation <- function(var1, var2, #required
     labs(x = var1name, y = var2name, subtitle = resTXT) +
     theme_minimal() +
     theme(text = element_text(size = txtsize),
-          plot.title = element_text(hjust = 0.5, size = txtsize+2 face = titleface, color = "black"),
+          plot.title = element_text(hjust = 0.5, size = txtsize+2, face = titleface, color = "black"),
           plot.subtitle = element_text(hjust=0.5),
           plot.background = element_rect(colour = framecolor, size = 1),
           panel.grid.major = element_blank(),
