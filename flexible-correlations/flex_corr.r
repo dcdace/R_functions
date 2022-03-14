@@ -9,21 +9,21 @@ library(MASS) # WRS2 uses it. Its select function conflicts with dplyr select!
 # =======================================================
 get_outliers <-
   function(var1, var2, # required
-  var1name = NULL, var1y = NULL,
-  var2name = NULL, var2y = NULL,
+  var1name = NULL, var1ylab = NULL,
+  var2name = NULL, var2ylab = NULL,
   disp = FALSE) {
     # if labels are not defined, assign these:
     if (is.null(var1name)) {
       var1name <- "var1"
     }
     if (is.null(var2name)) {
-      var1name <- "var2"
+      var2name <- "var2"
     }
-    if (is.null(var1y)) {
-      var1name <- ""
+    if (is.null(var1ylab)) {
+      var1ylab <- ""
     }
-    if (is.null(var2y)) {
-      var1name <- ""
+    if (is.null(var2ylab)) {
+      var2ylab <- ""
     }
 
     # put the 2 univariate and 1 bivariate plots together
@@ -31,8 +31,8 @@ get_outliers <-
 
     # UNIVARIATE, boxplot method
     # ------------------------------------
-    bpVar1 <- boxplot(var1, main = var1name, ylab = var1y, plot = disp)
-    bpVar2 <- boxplot(var2, main = var2name, ylab = var2y, plot = disp)
+    bpVar1 <- boxplot(var1, main = var1name, ylab = var1ylab, plot = disp)
+    bpVar2 <- boxplot(var2, main = var2name, ylab = var2ylab, plot = disp)
     # oVar1
     ifelse(length(bpVar1$out) == 0,
       oVar1 <- vector(mode = "numeric", length = 0),
