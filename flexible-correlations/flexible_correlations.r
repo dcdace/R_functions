@@ -1,6 +1,7 @@
 # =======================================================
-## INSTALL AND LOAD THE REQUIRED PACKAGES
-# define a function that checks and installs missing packages
+# INSTALL AND LOAD THE REQUIRED PACKAGES
+# =======================================================
+# Define a function that checks and installs missing packages
 install_packages <- function(packages) {
   lapply(packages,
     FUN = function(x)(
@@ -20,25 +21,22 @@ packages_required <- c(
   "cobs", "robust", "mgcv", "scatterplot3d", "quantreg", "rrcov", "lars", "pwr", "trimcluster", "mc2d", "psych", "Rfit", "DepthProc", "class", "fda", "rankFD",
   "devtools" # to install WRS from the github site
   )
-
 # Install the missing required packages
 install_packages(packages_required)
-
 # Install WRS package from GitHub
-if (lenght(find.packages("WRS", quiet = TRUE) == 0)){
+if (lenght(find.packages("WRS", quiet = TRUE) == 0)) {
   library(devtools)
-  install_github("nicebread/WRS", subdir="pkg")
+  install_github("nicebread/WRS", subdir = "pkg")
 }
 
 # Not all required packages need to be loaded. Only load the ones that are needed
 # A list of packages that need to be loaded
 packages_to_load <- c("ggplot2", "Hmisc", "aplpacl", "WRS2", "WRS")
-
 # Load the packages:
 invisible(lapply(packages_to_load, library, character.only = TRUE))
-# =======================================================
 
-# GET OUTLIERS (from a variable pair, for correlations)
+# =======================================================
+# FUNCTION GET OUTLIERS (from a variable pair, for correlations)
 # =======================================================
 get_outliers <-
   function(var1, var2, # required
@@ -101,9 +99,10 @@ get_outliers <-
     return(list(all, univariate, bivariate))
   }
 
-# DO CORRELATIONS
-# Depending on the data, 3 types of correlations possible. Following recommendations by Pernet et al.(2013)
 # =======================================================
+# FUNCTION DO CORRELATIONS
+# =======================================================
+# Depending on the data, 3 types of correlations possible. Following recommendations by Pernet et al.(2013)
 do_correlation <- function(var1, var2, outliers = NULL) {
   # if outliers not provided, get them
   if (is.null(outliers)) {
@@ -157,8 +156,9 @@ do_correlation <- function(var1, var2, outliers = NULL) {
   return(list(corResTxt, p))
 }
 
-# PLOT CORRELATIONS (with 95%CI)
-# ------------------------------------
+# =======================================================
+# FUNCTION PLOT CORRELATIONS (with 95%CI)
+# =======================================================
 plot_correlation <- function(var1, var2, #required
   var1name = "var1", var2name = "var2", # axis lables
   corRes = NULL,
