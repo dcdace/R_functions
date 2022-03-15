@@ -9,23 +9,9 @@ library(MASS) # WRS2 uses it. Its select function conflicts with dplyr select!
 # =======================================================
 get_outliers <-
   function(var1, var2, # required
-  var1name = NULL, var2name = NULL,
-  var1ylab = NULL, var2ylab = NULL,
+  var1name = "var1", var2name = "var2",
+  var1ylab = "", var2ylab = "",
   disp = FALSE) {
-    # if labels are not defined, assign these:
-    if (is.null(var1name)) {
-      var1name <- "var1"
-    }
-    if (is.null(var2name)) {
-      var2name <- "var2"
-    }
-    if (is.null(var1ylab)) {
-      var1ylab <- ""
-    }
-    if (is.null(var2ylab)) {
-      var2ylab <- ""
-    }
-
     # put the 2 univariate and 1 bivariate plots together
     par(mfrow = c(1, 3))
 
@@ -141,19 +127,12 @@ do_correlation <- function(var1, var2, outliers = NULL) {
 # PLOT CORRELATIONS (with 95%CI)
 # ------------------------------------
 plot_correlation <- function(var1, var2, #required
-  var1name = NULL, var2name = NULL, # axis lables
+  var1name = "var1", var2name = "var2", # axis lables
   corRes = NULL,
   pointsize = 1.8, txtsize = 11, # default point and font size
   outliers = NULL,
   plotoutliers = FALSE,
   pthreshold = NULL) {
-  # If lables not give, use these:
-  if (is.null(var1name)) {
-    var1name <- "var1"
-  }
-  if (is.null(var2name)) {
-    var2name <- "var2"
-  }
   # If outliers not given, get them
   if (is.null(outliers)) {
     outliers <- get_outliers(var1, var2)
