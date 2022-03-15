@@ -9,8 +9,8 @@ library(MASS) # WRS2 uses it. Its select function conflicts with dplyr select!
 # =======================================================
 get_outliers <-
   function(var1, var2, # required
-  var1name = NULL, var1ylab = NULL,
-  var2name = NULL, var2ylab = NULL,
+  var1name = NULL, var2name = NULL, 
+  var1ylab = NULL, var2ylab = NULL,
   disp = FALSE) {
     # if labels are not defined, assign these:
     if (is.null(var1name)) {
