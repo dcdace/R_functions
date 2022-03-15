@@ -24,7 +24,7 @@ packages_required <- c(
 # Install the missing required packages
 install_packages(packages_required)
 # Install WRS package from GitHub
-if (lenght(find.packages("WRS", quiet = TRUE) == 0)) {
+if (length(find.packages("WRS", quiet = TRUE) == 0)) {
   library(devtools)
   install_github("nicebread/WRS", subdir = "pkg")
 }
