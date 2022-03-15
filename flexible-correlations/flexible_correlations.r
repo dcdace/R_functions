@@ -1,9 +1,42 @@
-library(ggplot2)
-library(Hmisc) # for several stats things
-library(aplpack) # for bi-variate outlier, bgplot
-library(WRS2) # for percentage bend correlation coefficient. See https://link-springer-com.ezp.lib.cam.ac.uk/content/pdf/10.1007/BF02294395.pdf
-library(WRS) # for Wilcox correlation functions (skipped correlations)
-library(MASS) # WRS2 uses it. Its select function conflicts with dplyr select!
+# =======================================================
+## INSTALL AND LOAD THE REQUIRED PACKAGES
+# define a function that checks and installs missing packages
+install_packages <- function(packages) {
+  lapply(packages,
+    FUN = function(x)(
+        if (length(find.package(x, quiet = TRUE)) == 0) {
+          install.packages(x, dependencies = TRUE)
+        }))
+}
+# A list of required packages
+packages_required <- c(
+  "ggplot2", # for plotting
+  "Hmisc", # for several stats things
+  "aplpack", # for bi-variate outlier, bgplot
+  "WRS2", # for percentage bend correlation coefficient. See https://link-springer-com.ezp.lib.cam.ac.uk/content/pdf/10.1007/BF02294395.pdf
+# WRS for Wilcox correlation functions (skipped correlations)
+# WRS requires several dependent packages, as specified here https://github.com/nicebread/WRS
+  "MASS", "akima", "robustbase", # MASS's select function conflicts with dplyr select!
+  "cobs", "robust", "mgcv", "scatterplot3d", "quantreg", "rrcov", "lars", "pwr", "trimcluster", "mc2d", "psych", "Rfit", "DepthProc", "class", "fda", "rankFD",
+  "devtools" # to install WRS from the github site
+  )
+
+# Install the missing required packages
+install_packages(packages_required)
+
+# Install WRS package from GitHub
+if (lenght(find.packages("WRS", quiet = TRUE) == 0)){
+  library(devtools)
+  install_github("nicebread/WRS", subdir="pkg")
+}
+
+# Not all required packages need to be loaded. Only load the ones that are needed
+# A list of packages that need to be loaded
+packages_to_load <- c("ggplot2", "Hmisc", "aplpacl", "WRS2", "WRS")
+
+# Load the packages:
+invisible(lapply(packages_to_load, library, character.only = TRUE))
+# =======================================================
 
 # GET OUTLIERS (from a variable pair, for correlations)
 # =======================================================
