@@ -31,7 +31,7 @@ if (length(find.package("WRS", quiet = TRUE)) == 0) {
 
 # Not all required packages need to be loaded. Only load the ones that are needed
 # A list of packages that need to be loaded
-packages_to_load <- c("ggplot2", "Hmisc", "aplpack", "WRS2", "WRS")
+packages_to_load <- c("ggplot2", "Hmisc", "aplpack", "WRS2", "WRS", "MASS")
 # Load the packages:
 invisible(lapply(packages_to_load, library, character.only = TRUE))
 
