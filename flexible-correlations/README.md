@@ -17,4 +17,4 @@ See the accompanied `Jupyter Notebook` [description-and-examples.ipynb](https://
 
 You can also interact with the notebook through the Binder. 
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/dcdace/R_functions/HEAD?labpath=https%3A%2F%2Fgithub.com%2Fdcdace%2FR_functions%2Fblob%2Fmain%2Fflexible-correlations%2Fdescription-and-examples.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/dcdace/R_functions/HEAD?labpath=flexible-correlations%2Fdescription-and-examples.ipynb)
