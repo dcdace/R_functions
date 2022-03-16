@@ -55,7 +55,7 @@ install_packages <- function(packages) {
 packages_required <- c(
   "Rmisc", # for getting summary data frame
   "ggplot2", # for plotting
-  "ggpur", # for Quantile-Quantile plot
+  "ggpubr", # for Quantile-Quantile plot
   "cowplot", # for adding plots together and setting different widths
   "gtools", # for converting pvalues to stars
   "rstatix" # for pairwise ttests
