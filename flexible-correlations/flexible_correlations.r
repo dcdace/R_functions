@@ -118,11 +118,6 @@ do_correlation <- function(var1, var2, outliers = NULL) {
 
   # if is Bivariate do Spearman skipped, using the minimum covariance determinant (MCD) estimator
   if (isBivariate) {
-    # corRes <-
-    #   scorci(var1,var2,nboot = 1000,corfun = spear,plotit = FALSE)
-    # r <- corRes$cor.est
-    # p <- corRes$p.value
-    # f <- "Spearman skipped"
     corRes <-
       mscor(data.frame(var1, var2), corfun = spear, cop = 3)
     r <- corRes$cor[2]
