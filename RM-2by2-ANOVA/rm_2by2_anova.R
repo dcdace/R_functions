@@ -43,13 +43,14 @@
 # REQUIRED LIBRARIES
 # ----------------------------------------------------------------------
 # Define a function that checks and installs missing packages
+i # Define a function that checks and installs missing packages
 install_packages <- function(packages) {
   lapply(packages,
     FUN = function(x)(
         if (length(find.package(x, quiet = TRUE)) == 0) {
           install.packages(x, dependencies = TRUE)
- 
-
+        }))
+}
 # A list of required packages
 packages_required <- c(
   "Rmisc", # for getting summary data frame
@@ -142,7 +143,7 @@ rm_2by2_anova <- function(data, columns, param) {
     theme(plot.title = element_text(hjust = 0.5, color = outlier.title.color))
 
 
-  # Check normality 
+  # Check normality
   # ----------------------------------------------------------------------
   cat("\n Normality \n\n")
 
