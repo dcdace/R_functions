@@ -42,27 +42,31 @@
 # ----------------------------------------------------------------------
 # REQUIRED LIBRARIES
 # ----------------------------------------------------------------------
-# library(Rmisc)     # for getting summary data frame
-# library(ggpubr)    # For Quantile-Quantile plot
-# library(ggplot2)   # for plotting results
-# library(cowplot)   # for adding plots together and setting different widths
-# library(gtools)    # for converting pvalues to stars
-# library(rstatix)   # for pairwise ttests
-#                 
+# Define a function that checks and installs missing packages
+install_packages <- function(packages) {
+  lapply(packages,
+    FUN = function(x)(
+        if (length(find.package(x, quiet = TRUE)) == 0) {
+          install.packages(x, dependencies = TRUE)
+ 
+
+# A list of required packages
+packages_required <- c(
+  "Rmisc", # for getting summary data frame
+  "ggplot2", # for plotting
+  "ggpur", # for Quantile-Quantile plot
+  "cowplot", # for adding plots together and setting different widths
+  "gtools", # for converting pvalues to stars
+  "rstatix" # for pairwise ttests
+  )
+# Install the missing required packages
+install_packages(packages_required)
+# Load the packages:
+invisible(lapply(packages_required, library, character.only = TRUE))
+
+
 # ===================================================================================
-
 rm_2by2_anova <- function(data, columns, param) {
-
-  # ----------------------------------------------------------------------
-  # LIBRARIES
-  # ----------------------------------------------------------------------
-  library(Rmisc) # for getting summary data frame
-  library(ggpubr) # For Quantile-Quantile plot
-  library(ggplot2) # for plotting results
-  library(cowplot) # for adding plots together and setting different widths
-  library(gtools) # for converting pvalues to stars
-  library(rstatix) # for pairwise ttests
-
   # ----------------------------------------------------------------------
   # Results list to store results
   # ----------------------------------------------------------------------
