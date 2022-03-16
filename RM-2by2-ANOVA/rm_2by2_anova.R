@@ -49,7 +49,7 @@ install_packages <- function(packages) {
     FUN = function(x)(
         if (length(find.package(x, quiet = TRUE)) == 0) {
           install.packages(x, dependencies = TRUE)
-        }))
+        })
 }
 # A list of required packages
 packages_required <- c(
