@@ -1,30 +1,30 @@
 # ===================================================================================
-# Dace Apsvalka, October, 2020, www.dcdace.net
+# Dace Apšvalka, October, 2020, www.dcdace.net
 # ===================================================================================
 #
 # 2x2 Repeated measures within-subject ANOVA results and plots
 #
 # INPUT DATA:
 #      - data: dataset in long-format
-#      - columns: list of columns of interest. 
+#      - columns: list of columns of interest.
 #                 Must contain sID, DV, Fc1, Fc2
 #                 For example:
 #                     columns <- list(sID = "Participant_ID",
 #                                     DV  = "Subjective_Valence",
 #                                     Fc1 = "Item_Category",
 #                                     Fc2 = "Emotion_Condition")
-#                    
+
 #      - param: list of parameters
-#                    Must contain y.label, Fc1.label, Fc2.label, title, cat.color, errorbar  
+#                    Must contain y.label, Fc1.label, Fc2.label, title, cat.color, errorbar
 #                    For example:
 #                        parameters <- list(
 #                                        y.label    = "Subjective Valence",
 #                                        Fc1.label  = "Item",
 #                                        Fc2.label  = "Emotion",
-#                                        cat.color  = c("#DF4A56", "#5284a8"),
+#                                        cat.color  = c('#DF4A56', '#5284a8'),
 #                                        errorbar   = "ci"  # can be either sd, se, or ci
 #                                           )
-#                        parameters$title <- sprintf("%s x %s interaction", parameters$Fc2.label, parameters$Fc1.label)
+#                        parameters$title <- sprintf('%s x %s interaction', parameters$Fc2.label, parameters$Fc1.label)
 #
 # OUTPUT DATA: a list of result items
 #          outliers               - results of identify_outliers function
@@ -32,38 +32,41 @@
 #          plot.assumption.checks - boxplots and QQ plots in one plot
 #          dataSummary            - Within-Subject descriptive summary of all 4 levels
 #          res.anova              - ANOVA results of aov function
-#          res.txt.anova          - Formatted ANOVA results 
-#          res.txt.Fc1            - Formatted Factor 1 Main effect 
+#          res.txt.anova          - Formatted ANOVA results
+#          res.txt.Fc1            - Formatted Factor 1 Main effect
 #          res.txt.Fc2            - Formatted Factor 2 Main effect  
 #          pwc1                   - Pairwise comparisons grouped by Factor 1
 #          pwc2                   - Pairwise comparisons grouped by Factor 2
 #          plot.anova             - the results plot
 #
-#
 # ----------------------------------------------------------------------
 # REQUIRED LIBRARIES
 # ----------------------------------------------------------------------
-# library(Rmisc)     # for getting summary data frame
-# library(ggpubr)    # For Quantile-Quantile plot
-# library(ggplot2)   # for plotting results
-# library(cowplot)   # for adding plots together and setting different widths
-# library(gtools)    # for converting pvalues to stars
-# library(rstatix)   # for pairwise ttests
-#                 
+# Define a function that checks and installs missing packages
+install_packages <- function(packages) {
+  lapply(packages,
+    FUN = function(x)(
+        if (length(find.package(x, quiet = TRUE)) == 0) {
+          install.packages(x, dependencies = TRUE)
+ 
+
+# A list of required packages
+packages_required <- c(
+  "Rmisc", # for getting summary data frame
+  "ggplot2", # for plotting
+  "ggpur", # for Quantile-Quantile plot
+  "cowplot", # for adding plots together and setting different widths
+  "gtools", # for converting pvalues to stars
+  "rstatix" # for pairwise ttests
+  )
+# Install the missing required packages
+install_packages(packages_required)
+# Load the packages:
+invisible(lapply(packages_required, library, character.only = TRUE))
+
+
 # ===================================================================================
-
 rm_2by2_anova <- function(data, columns, param) {
-
-  # ----------------------------------------------------------------------
-  # LIBRARIES
-  # ----------------------------------------------------------------------
-  library(Rmisc) # for getting summary data frame
-  library(ggpubr) # For Quantile-Quantile plot
-  library(ggplot2) # for plotting results
-  library(cowplot) # for adding plots together and setting different widths
-  library(gtools) # for converting pvalues to stars
-  library(rstatix) # for pairwise ttests
-
   # ----------------------------------------------------------------------
   # Results list to store results
   # ----------------------------------------------------------------------
@@ -143,7 +146,7 @@ rm_2by2_anova <- function(data, columns, param) {
   # ----------------------------------------------------------------------
   cat("\n Normality \n\n")
 
-  # Shapiro-Wilk"s test (should be > .05)
+  # Shapiro-Wilk's test (should be > .05)
   results$normality <- df %>%
     group_by(Fc1, Fc2) %>%
     shapiro_test(meanDV)
