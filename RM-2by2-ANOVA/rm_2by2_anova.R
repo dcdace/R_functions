@@ -43,7 +43,7 @@
 # REQUIRED LIBRARIES
 # ----------------------------------------------------------------------
 # Define a function that checks and installs missing packages
-i # Define a function that checks and installs missing packages
+# Define a function that checks and installs missing packages
 install_packages <- function(packages) {
   lapply(packages,
     FUN = function(x)(
