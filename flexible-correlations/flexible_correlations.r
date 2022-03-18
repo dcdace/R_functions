@@ -188,8 +188,8 @@ do_correlation <- function(var1, var2, assumptions = NULL) {
 plot_correlation <- function(var1, var2, #required
   var1name = "var1", var2name = "var2", # axis lables
   corr_results = NULL,
-  pointsize = 1.8, txtsize = 11, # default point and font size
   assumptions = NULL,
+  pointsize = 1.8, txtsize = 11, # default point and font size
   plotoutliers = FALSE,
   pthreshold = NULL,
   datainfo = TRUE) {
