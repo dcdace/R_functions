@@ -140,7 +140,7 @@ do_correlation <- function(var1, var2, outliers = NULL) {
     subs <- "pb"
   }
   if (isUnivariate) {
-    infotxt2 <- "univariate outlier/s"
+    infotxt[2] <- "univariate outlier/s"
   } else
     infotxt[2] <- ""
   if (!isNormal) {
@@ -162,7 +162,7 @@ do_correlation <- function(var1, var2, outliers = NULL) {
 
   pval <- ifelse(p < 0.001, "p < 0.001", sprintf("p = %.3f", p))
   corResTxt <- bquote(.(f) ~ "correlation" ~ r[.(subs)] == .(sprintf("%.3f, %s", r, pval)))
-  infotxt <- paste(c("Data:", infotxt), collapse = ";")
+  infotxt <- sprintf("Data: %s", paste(infotxt, collapse = "; "))
 
   return(list(corResTxt, p, infotxt))
 }
