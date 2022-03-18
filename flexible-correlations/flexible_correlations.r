@@ -1,4 +1,6 @@
+#
 # Dace Apšvalka, 2022, www.dcdace.net
+#
 # =======================================================
 # INSTALL AND LOAD THE REQUIRED PACKAGES
 # =======================================================
@@ -40,39 +42,38 @@ invisible(lapply(packages_to_load, library, character.only = TRUE))
 # =======================================================
 # FUNCTION CHECK ASSUMPTIONS (for a variable pair, for correlations)
 # =======================================================
-check_assumptions <-
-  function(var1, var2, # required
+check_assumptions <- function(var1, var2, # required
   var1name = "var1", var2name = "var2",
   var1ylab = "", var2ylab = "",
   disp = FALSE) {
-    # put the 2 univariate, 1 bivariate, and Q-Q plots together
-    par(mfrow = c(1, 4))
+  # put the 2 univariate, 1 bivariate, and Q-Q plots together
+  par(mfrow = c(1, 4))
 
-    # UNIVARIATE, boxplot method
-    # ------------------------------------
-    bpVar1 <- boxplot(var1, main = var1name, ylab = var1ylab, plot = disp)
-    bpVar2 <- boxplot(var2, main = var2name, ylab = var2ylab, plot = disp)
-    # oVar1
-    ifelse(length(bpVar1$out) == 0,
+  # UNIVARIATE, boxplot method
+  # ------------------------------------
+  bpVar1 <- boxplot(var1, main = var1name, ylab = var1ylab, plot = disp)
+  bpVar2 <- boxplot(var2, main = var2name, ylab = var2ylab, plot = disp)
+  # oVar1
+  ifelse(length(bpVar1$out) == 0,
       oVar1 <- vector(mode = "numeric", length = 0),
       oVar1 <- which(var1 %in% bpVar1$out)
     )
-    # oVar2
-    ifelse(length(bpVar2$out) == 0,
+  # oVar2
+  ifelse(length(bpVar2$out) == 0,
       oVar2 <- vector(mode = "numeric", length = 0),
       oVar2 <- which(var2 %in% bpVar2$out)
     )
 
-    # BI-VARIATE, bagplot method
-    # ------------------------------------
-    # A bagplot is a bivariate generalization of the  boxplot. A bivariate boxplot.
-    bpl <- compute.bagplot(var1, var2)
-    # oBiv
-    ifelse(is.null(bpl$pxy.outlier),
+  # BI-VARIATE, bagplot method
+  # ------------------------------------
+  # A bagplot is a bivariate generalization of the  boxplot. A bivariate boxplot.
+  bpl <- compute.bagplot(var1, var2)
+  # oBiv
+  ifelse(is.null(bpl$pxy.outlier),
       oBiv <- vector(mode = "numeric", length = 0),
       oBiv <- which(var1 %in% bpl$pxy.outlier[, 1])
     )
-    bp <-
+  bp <-
       bagplot(
         var1, var2,
         ylab = var2name, xlab = var1name,
@@ -81,44 +82,44 @@ check_assumptions <-
         create.plot = disp
       )
 
-    # BI-VARIATE NORMALITY
-    # ------------------------------------
-    # using Henze-Zirkler Test for Multivariate Normality
-    bvn <- HZ.test(cbind(var1, var2), qqplot = TRUE)
-    bvn_result <- ifelse(bvn@p.value < 0.05, "Data are bi-variate normal", "Data are not bi-variate normal")
+  # BI-VARIATE NORMALITY
+  # ------------------------------------
+  # using Henze-Zirkler Test for Multivariate Normality
+  bvn <- HZ.test(cbind(var1, var2), qqplot = disp)
+  bvn_result <- ifelse(bvn@p.value > 0.05, "Data are bi-variate normal", "Data are not bi-variate normal")
 
-    # Report results
-    # ------------------------------------
-    if (disp) {
-      # var1
-      print(sprintf("%s outliers: %d", var1name, length(bpVar1$out)))
-      print(oVar1)
-      # var2
-      print(sprintf("%s outliers: %d", var2name, length(bpVar2$out)))
-      print(oVar2)
-      # bi-var
-      print(sprintf("Bi-variate outliers: %d", length(oBiv)))
-      print(oBiv)
-      # normality
-      print(sprintf("Henze-Zirkler test for Multivariate Normality /n % (HZ = %0.2f, p = %0.2f)",
+  # Report results
+  # ------------------------------------
+  if (disp) {
+    # var1
+    cat(sprintf("\n%s outlier cases(n=%d): %s \n", var1name, length(bpVar1$out), paste(oVar1, collapse = ",")))
+    # var2
+    cat(sprintf("%s outlier cases(n=%d): %s \n", var2name, length(bpVar2$out), paste(oVar2, collapse = ",")))
+    # bi-var
+    cat(sprintf("Bi-variate outlier cases(n=%d): %s \n", length(oBiv), paste(oBiv, collapse = ",")))
+    # normality
+    cat(sprintf("\nHenze-Zirkler test for Multivariate Normality:\n%s(HZ = %.2f, p = %.2f)\n",
       bvn_result, bvn@HZ, bvn@p.value))
-    }
-
-    # Return results
-    # ------------------------------------
-    all <- c(oVar1, oVar2, oBiv)
-    univariate <- c(oVar1, oVar2)
-    bivariate <- oBiv
-    normality <- bvn@p.value
-    return(list(all, univariate, bivariate, normality))
   }
+
+  # Return results
+  # ------------------------------------
+  assumptions <- list()
+  assumptions$outliers_all <- c(oVar1, oVar2, oBiv)
+  assumptions$outliers_uni <- c(oVar1, oVar2)
+  assumptions$outliers_bi <- oBiv
+  assumptions$normality <- bvn@p.value > 0.05
+
+  return(assumptions)
+}
 
 # =======================================================
 # FUNCTION DO CORRELATIONS
 # =======================================================
 # Depending on the data, 3 types of correlations possible. Following recommendations by Pernet et al.(2013)
 do_correlation <- function(var1, var2, assumptions = NULL) {
-  infotxt <- list()
+  corr_results <- list()
+  datainfo <- list()
   i <- 0
   # if assumptions not provided, get them
   if (is.null(assumptions)) {
@@ -126,58 +127,59 @@ do_correlation <- function(var1, var2, assumptions = NULL) {
   }
   # WHICH CORRELATION
   # ------------------------------------
-  isOutliers <- length(assumptions[[1]]) > 0
-  isUnivariate <- length(assumptions[[2]]) > 0
-  isBivariate <- length(assumptions[[3]]) > 0
-  isNormal <- assumptions[[4]] > 0.05
+  isOutliers <- length(assumptions$outliers_all) > 0
+  isUnivariate <- length(assumptions$outliers_uni) > 0
+  isBivariate <- length(assumptions$outliers_bi) > 0
+  isNormal <- assumptions$normality
 
   # if is Bivariate do Spearman skipped, using the minimum covariance determinant (MCD) estimator
   if (isBivariate) {
-    corRes <-
+    corr_results <-
       mscor(data.frame(var1, var2), corfun = spear, cop = 3)
-    r <- corRes$cor[2]
-    p <- 2 * pt(-abs(corRes$test.stat[2]), df = length(var1) - 1)
+    r <- corr_results$cor[2]
+    p <- 2 * pt(-abs(corr_results$test.stat[2]), df = length(var1) - 1)
     f <- "Spearman skipped"
     subs <- "ss"
     i <- i + 1
-    infotxt[i] <- "bi-variate outlier/s"
+    datainfo[i] <- "bi-variate outlier/s"
   }
 
   # if is not Bivar but is Univar or is not Normal, do 20% Bend
   if (!isBivariate & (isUnivariate | !isNormal)) {
-    corRes <-
+    corr_results <-
       pbcor(var1, var2, beta = 0.2)
-    r <- corRes$cor
-    p <- corRes$p.value
+    r <- corr_results$cor
+    p <- corr_results$p.value
     f <- "Percentage-bend"
     subs <- "pb"
   }
   if (isUnivariate) {
     i <- i + 1
-    infotxt[i] <- "univariate outlier/s"
+    datainfo[i] <- "univariate outlier/s"
   }
   if (!isNormal) {
     i <- i + 1
-    infotxt[i] <- "not bi-variate normality"
+    datainfo[i] <- "not bi-variate normality"
   }
 
   # if no outliers and is normal do Pearson
   if (!isOutliers & isNormal) {
-    corRes <-
+    corr_results <-
       rcorr(var1, var2)
-    r <- corRes$r[2]
-    p <- corRes$P[2]
+    r <- corr_results$r[2]
+    p <- corr_results$P[2]
     f <- "Pearson"
     subs <- ""
     i <- i + 1
-    infotxt[i] <- "no outliers and has bi-variate normality"
+    datainfo[i] <- "no outliers and has bi-variate normality"
   }
 
   pval <- ifelse(p < 0.001, "p < 0.001", sprintf("p = %.3f", p))
-  corResTxt <- bquote(.(f) ~ "correlation" ~ r[.(subs)] == .(sprintf("%.3f, %s", r, pval)))
-  infotxt <- sprintf("Data: %s", paste(infotxt, collapse = "; "))
+  corr_results$txt <- bquote(.(f) ~ "correlation" ~ r[.(subs)] == .(sprintf("%.3f, %s", r, pval)))
+  corr_results$p <- p
+  corr_results$datainfo <- sprintf("Data: %s", paste(datainfo, collapse = "; "))
 
-  return(list(corResTxt, p, infotxt))
+  return(corr_results)
 }
 
 # =======================================================
@@ -185,44 +187,40 @@ do_correlation <- function(var1, var2, assumptions = NULL) {
 # =======================================================
 plot_correlation <- function(var1, var2, #required
   var1name = "var1", var2name = "var2", # axis lables
-  corRes = NULL,
+  corr_results = NULL,
   pointsize = 1.8, txtsize = 11, # default point and font size
   assumptions = NULL,
   plotoutliers = FALSE,
   pthreshold = NULL,
   datainfo = TRUE) {
-  # If outliers not given, get them
+  # If assumptions not given, get them
   if (is.null(assumptions)) {
     assumptions <- check_assumptions(var1, var2)
-    outliers <- assumptions[[1]]
   }
   # If correlation results not given, get them
-  if (is.null(corRes)) {
-    corRes <- do_correlation(var1, var2, outliers)
+  if (is.null(corr_results)) {
+    corr_results <- do_correlation(var1, var2, assumptions)
   }
   # Format the output
-  if (length(outlier) > 0) {
-    out1 <- var1[outliers]
-    out2 <- var2[outliers]
+  if (length(assumptions$outliers_all) > 0) {
+    out1 <- var1[assumptions$outliers_all]
+    out2 <- var2[assumptions$outliers_all]
     outdata <- data.frame(out1, out2)
 
-    var1 <- var1[-c(outliers)]
-    var2 <- var2[-c(outliers)]
+    var1 <- var1[-c(assumptions$outliers_all)]
+    var2 <- var2[-c(assumptions$outliers_all)]
     ifelse(plotoutliers == TRUE,
-           addTxt <- sprintf("\n Outliers (n=%d) displayed in red", length(unique(outliers))),
-           addTxt <- sprintf("\n Outliers (n=%d) not displayed", length(unique(outliers)))
+           addTxt <- sprintf("\n Outliers (n=%d) displayed in red", length(unique(assumptions$outliers_all))),
+           addTxt <- sprintf("\n Outliers (n=%d) not displayed", length(unique(assumptions$outliers_all)))
            )
-    resTXT <- bquote(atop(.(corRes[[1]]), .(addTxt)))
-  }
-  else {
-    resTXT <- corRes[[1]]
+    corr_results$txt <- bquote(atop(.(corr_results$txt), .(addTxt)))
   }
 
   # If alpha not defined, set it to 0 (to ignore it)
   if (is.null(pthreshold)) {
     pthreshold <- 0
   }
-  if (corRes[[2]] < pthreshold) {
+  if (corr_results$p < pthreshold) {
     titleface <- "bold"
     framecolor <- "red"
   } else {
@@ -241,7 +239,7 @@ plot_correlation <- function(var1, var2, #required
       colour = "black", alpha = .8, fill = "orange",
       size = pointsize, stroke = 0.2, shape = 21
     ) +
-    labs(x = var1name, y = var2name, subtitle = resTXT) +
+    labs(x = var1name, y = var2name, subtitle = corr_results$txt) +
     theme_minimal() +
     theme(text = element_text(size = txtsize),
           plot.title = element_text(hjust = 0.5, size = txtsize + 2, face = titleface, color = "black"),
@@ -251,12 +249,12 @@ plot_correlation <- function(var1, var2, #required
           panel.grid.minor = element_blank()
           )
   # if asked to display, add outliers on the plot
-  if (length(outliers) > 0 & plotoutliers == TRUE) {
+  if (length(assumptions$outliers_all) > 0 & plotoutliers == TRUE) {
     corplot <- corplot + geom_point(data = outdata, aes(out1, out2), color = "red")
   }
   # if asked to show data info, add it to the plot caption
   if (datainfo) {
-    corplot <- corplot + labs(caption = corRes[[3]])
+    corplot <- corplot + labs(caption = corr_results$datainfo)
   }
   return(corplot)
 }
