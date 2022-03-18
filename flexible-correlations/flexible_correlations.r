@@ -107,6 +107,7 @@ get_outliers <-
 # Depending on the data, 3 types of correlations possible. Following recommendations by Pernet et al.(2013)
 do_correlation <- function(var1, var2, outliers = NULL) {
   infotxt <- list()
+  i <- 1
   # if outliers not provided, get them
   if (is.null(outliers)) {
     outliers <- get_outliers(var1, var2)
@@ -127,9 +128,9 @@ do_correlation <- function(var1, var2, outliers = NULL) {
     p <- 2 * pt(-abs(corRes$test.stat[2]), df = length(var1) - 1)
     f <- "Spearman skipped"
     subs <- "ss"
-    infotxt[1] <- "bi-variate outlier/s"
-  } else
-    infotxt[1] <- ""
+    i <- i + 1
+    infotxt[i] <- "bi-variate outlier/s"
+  }
 
   # if is not Bivar but is Univar or is not Normal, do 20% Bend
   if (!isBivariate & (isUnivariate | !isNormal)) {
@@ -141,13 +142,13 @@ do_correlation <- function(var1, var2, outliers = NULL) {
     subs <- "pb"
   }
   if (isUnivariate) {
-    infotxt[2] <- "univariate outlier/s"
-  } else
-    infotxt[2] <- ""
+    i <- i + 1
+    infotxt[i] <- "univariate outlier/s"
+  }
   if (!isNormal) {
-    infotxt[3] <- "not bi-variate normality"
-  } else
-    infotxt[3] <- ""
+    i <- i + 1
+    infotxt[i]] <- "not bi-variate normality"
+  }
 
   # if no outliers and is normal do Pearson
   if (!isOutliers & isNormal) {
@@ -157,9 +158,9 @@ do_correlation <- function(var1, var2, outliers = NULL) {
     p <- corRes$P[2]
     f <- "Pearson"
     subs <- ""
-    infotxt[4] <- "no outliers and has bi-variate normality"
-  } else
-    infotxt[4] <- ""
+    i <- i + 1
+    infotxt[i] <- "no outliers and has bi-variate normality"
+  }
 
   pval <- ifelse(p < 0.001, "p < 0.001", sprintf("p = %.3f", p))
   corResTxt <- bquote(.(f) ~ "correlation" ~ r[.(subs)] == .(sprintf("%.3f, %s", r, pval)))
@@ -242,7 +243,7 @@ plot_correlation <- function(var1, var2, #required
     corplot <- corplot + geom_point(data = outdata, aes(out1, out2), color = "red")
   }
   # if asked to show data info, add it to the plot caption
-  if (datainfo){
+  if (datainfo) {
     corplot <- corplot + labs(caption = corRes[[3]])
   }
   return(corplot)
