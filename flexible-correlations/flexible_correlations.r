@@ -147,7 +147,7 @@ do_correlation <- function(var1, var2, outliers = NULL) {
   }
   if (!isNormal) {
     i <- i + 1
-    infotxt[i]] <- "not bi-variate normality"
+    infotxt[i] <- "not bi-variate normality"
   }
 
   # if no outliers and is normal do Pearson
