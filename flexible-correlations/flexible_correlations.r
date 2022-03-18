@@ -126,7 +126,9 @@ do_correlation <- function(var1, var2, outliers = NULL) {
     p <- 2 * pt(-abs(corRes$test.stat[2]), df = length(var1) - 1)
     f <- "Spearman skipped"
     subs <- "ss"
-  }
+    infotxt1 <- "bi-variate outlier/s"
+  } else
+    infotxt1 <- ""
 
   # if is not Bivar but is Univar or is not Normal, do 20% Bend
   if (!isBivariate & (isUnivariate | !isNormal)) {
@@ -137,6 +139,14 @@ do_correlation <- function(var1, var2, outliers = NULL) {
     f <- "Percentage-bend"
     subs <- "pb"
   }
+  if (isUnivariate) {
+    infotxt2 <- "univariate outlier/s"
+  } else
+    infotxt2 <- ""
+  if (!isNormal) {
+    infotxt3 <- "not bi-variate normality"
+  } else
+    infotxt3 <- ""
 
   # if no outliers and is normal do Pearson
   if (!isOutliers & isNormal) {
@@ -146,12 +156,15 @@ do_correlation <- function(var1, var2, outliers = NULL) {
     p <- corRes$P[2]
     f <- "Pearson"
     subs <- ""
-  }
+    infotxt4 <- "no outliers and has bi-variate normality"
+  } else
+    infotxt4 <- ""
 
   pval <- ifelse(p < 0.001, "p < 0.001", sprintf("p = %.3f", p))
   corResTxt <- bquote(.(f) ~ "correlation" ~ r[.(subs)] == .(sprintf("%.3f, %s", r, pval)))
+  infotxt <- paste(infotxt1, infotxt2, infotxt3, infotxt4)
 
-  return(list(corResTxt, p))
+  return(list(corResTxt, p, infotxt))
 }
 
 # =======================================================
@@ -213,7 +226,7 @@ plot_correlation <- function(var1, var2, #required
       colour = "black", alpha = .8, fill = "orange",
       size = pointsize, stroke = 0.2, shape = 21
     ) +
-    labs(x = var1name, y = var2name, subtitle = resTXT) +
+    labs(x = var1name, y = var2name, subtitle = resTXT, caption = corRes[[3]]) +
     theme_minimal() +
     theme(text = element_text(size = txtsize),
           plot.title = element_text(hjust = 0.5, size = txtsize + 2, face = titleface, color = "black"),
