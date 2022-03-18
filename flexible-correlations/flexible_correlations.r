@@ -15,6 +15,7 @@ packages_required <- c(
   "ggplot2", # for plotting
   "Hmisc", # for several stats things
   "aplpack", # for bi-variate outlier, bgplot
+  "mvnormalTest", # for multivariate-normality test
   "WRS2", # for percentage bend correlation coefficient. See https://link-springer-com.ezp.lib.cam.ac.uk/content/pdf/10.1007/BF02294395.pdf
 # WRS for Wilcox correlation functions (skipped correlations)
 # WRS requires several dependent packages, as specified here https://github.com/nicebread/WRS
@@ -32,7 +33,7 @@ if (length(find.package("WRS", quiet = TRUE)) == 0) {
 
 # Not all required packages need to be loaded. Only load the ones that are needed
 # A list of packages that need to be loaded
-packages_to_load <- c("ggplot2", "Hmisc", "aplpack", "WRS2", "WRS", "MASS")
+packages_to_load <- c("ggplot2", "Hmisc", "aplpack", "mvnormalTest", "WRS2", "WRS", "MASS")
 # Load the packages:
 invisible(lapply(packages_to_load, library, character.only = TRUE))
 
@@ -114,7 +115,8 @@ do_correlation <- function(var1, var2, outliers = NULL) {
   isOutliers <- length(outliers[[1]]) > 0
   isUnivariate <- length(outliers[[2]]) > 0
   isBivariate <- length(outliers[[3]]) > 0
-  isNormal <- (shapiro.test(var1)$p.value > 0.05 & shapiro.test(var2)$p.value > 0.05)
+  # using Henze-Zirkler Test for Multivariate Normality
+  isNormal <- mhz(cbind(var1, var2))$mv.test["p-value"] > 0.05
 
   # if is Bivariate do Spearman skipped, using the minimum covariance determinant (MCD) estimator
   if (isBivariate) {
