@@ -126,9 +126,9 @@ do_correlation <- function(var1, var2, outliers = NULL) {
     p <- 2 * pt(-abs(corRes$test.stat[2]), df = length(var1) - 1)
     f <- "Spearman skipped"
     subs <- "ss"
-    infotxt1 <- "bi-variate outlier/s"
+    infotxt[1] <- "bi-variate outlier/s"
   } else
-    infotxt1 <- ""
+    infotxt[1] <- ""
 
   # if is not Bivar but is Univar or is not Normal, do 20% Bend
   if (!isBivariate & (isUnivariate | !isNormal)) {
@@ -142,11 +142,11 @@ do_correlation <- function(var1, var2, outliers = NULL) {
   if (isUnivariate) {
     infotxt2 <- "univariate outlier/s"
   } else
-    infotxt2 <- ""
+    infotxt[2] <- ""
   if (!isNormal) {
-    infotxt3 <- "not bi-variate normality"
+    infotxt[3] <- "not bi-variate normality"
   } else
-    infotxt3 <- ""
+    infotxt[3] <- ""
 
   # if no outliers and is normal do Pearson
   if (!isOutliers & isNormal) {
@@ -156,13 +156,13 @@ do_correlation <- function(var1, var2, outliers = NULL) {
     p <- corRes$P[2]
     f <- "Pearson"
     subs <- ""
-    infotxt4 <- "no outliers and has bi-variate normality"
+    infotxt[4] <- "no outliers and has bi-variate normality"
   } else
-    infotxt4 <- ""
+    infotxt[4] <- ""
 
   pval <- ifelse(p < 0.001, "p < 0.001", sprintf("p = %.3f", p))
   corResTxt <- bquote(.(f) ~ "correlation" ~ r[.(subs)] == .(sprintf("%.3f, %s", r, pval)))
-  infotxt <- paste("Data:", infotxt1, infotxt2, infotxt3, infotxt4, collapse = ";")
+  infotxt <- paste(c("Data:", infotxt), collapse = ";")
 
   return(list(corResTxt, p, infotxt))
 }
