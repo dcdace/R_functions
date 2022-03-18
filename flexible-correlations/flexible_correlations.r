@@ -38,15 +38,15 @@ packages_to_load <- c("ggplot2", "Hmisc", "aplpack", "mvnTest", "WRS2", "WRS", "
 invisible(lapply(packages_to_load, library, character.only = TRUE))
 
 # =======================================================
-# FUNCTION GET OUTLIERS (from a variable pair, for correlations)
+# FUNCTION CHECK ASSUMPTIONS (for a variable pair, for correlations)
 # =======================================================
-get_outliers <-
+check_assumptions <-
   function(var1, var2, # required
   var1name = "var1", var2name = "var2",
   var1ylab = "", var2ylab = "",
   disp = FALSE) {
-    # put the 2 univariate and 1 bivariate plots together
-    par(mfrow = c(1, 3))
+    # put the 2 univariate, 1 bivariate, and Q-Q plots together
+    par(mfrow = c(1, 4))
 
     # UNIVARIATE, boxplot method
     # ------------------------------------
@@ -80,6 +80,13 @@ get_outliers <-
         cex = 2,
         create.plot = disp
       )
+
+    # BI-VARIATE NORMALITY
+    # ------------------------------------
+    # using Henze-Zirkler Test for Multivariate Normality
+    bvn <- HZ.test(cbind(var1, var2), qqplot = TRUE)
+    bvn_result <- ifelse(bvn@p.value < 0.05, "Data are bi-variate normal", "Data are not bi-variate normal")
+
     # Report results
     # ------------------------------------
     if (disp) {
@@ -92,33 +99,37 @@ get_outliers <-
       # bi-var
       print(sprintf("Bi-variate outliers: %d", length(oBiv)))
       print(oBiv)
+      # normality
+      print(sprintf("Henze-Zirkler test for Multivariate Normality /n % (HZ = %0.2f, p = %0.2f)",
+      bvn_result, bvn@HZ, bvn@p.value))
     }
+
     # Return results
     # ------------------------------------
     all <- c(oVar1, oVar2, oBiv)
     univariate <- c(oVar1, oVar2)
     bivariate <- oBiv
-    return(list(all, univariate, bivariate))
+    normality <- bvn@p.value
+    return(list(all, univariate, bivariate, normality))
   }
 
 # =======================================================
 # FUNCTION DO CORRELATIONS
 # =======================================================
 # Depending on the data, 3 types of correlations possible. Following recommendations by Pernet et al.(2013)
-do_correlation <- function(var1, var2, outliers = NULL) {
+do_correlation <- function(var1, var2, assumptions = NULL) {
   infotxt <- list()
   i <- 0
-  # if outliers not provided, get them
-  if (is.null(outliers)) {
-    outliers <- get_outliers(var1, var2)
+  # if assumptions not provided, get them
+  if (is.null(assumptions)) {
+    assumptions <- check_assumptions(var1, var2)
   }
   # WHICH CORRELATION
   # ------------------------------------
-  isOutliers <- length(outliers[[1]]) > 0
-  isUnivariate <- length(outliers[[2]]) > 0
-  isBivariate <- length(outliers[[3]]) > 0
-  # using Henze-Zirkler Test for Multivariate Normality
-  isNormal <- HZ.test(cbind(var1, var2))@p.value > 0.05
+  isOutliers <- length(assumptions[[1]]) > 0
+  isUnivariate <- length(assumptions[[2]]) > 0
+  isBivariate <- length(assumptions[[3]]) > 0
+  isNormal <- assumptions[[4]] > 0.05
 
   # if is Bivariate do Spearman skipped, using the minimum covariance determinant (MCD) estimator
   if (isBivariate) {
@@ -176,29 +187,30 @@ plot_correlation <- function(var1, var2, #required
   var1name = "var1", var2name = "var2", # axis lables
   corRes = NULL,
   pointsize = 1.8, txtsize = 11, # default point and font size
-  outliers = NULL,
+  assumptions = NULL,
   plotoutliers = FALSE,
   pthreshold = NULL,
   datainfo = TRUE) {
   # If outliers not given, get them
-  if (is.null(outliers)) {
-    outliers <- get_outliers(var1, var2)
+  if (is.null(assumptions)) {
+    assumptions <- check_assumptions(var1, var2)
+    outliers <- assumptions[[1]]
   }
   # If correlation results not given, get them
   if (is.null(corRes)) {
     corRes <- do_correlation(var1, var2, outliers)
   }
   # Format the output
-  if (length(outliers[[1]]) > 0) {
-    out1 <- var1[outliers[[1]]]
-    out2 <- var2[outliers[[1]]]
+  if (length(outlier) > 0) {
+    out1 <- var1[outliers]
+    out2 <- var2[outliers]
     outdata <- data.frame(out1, out2)
 
-    var1 <- var1[-c(outliers[[1]])]
-    var2 <- var2[-c(outliers[[1]])]
+    var1 <- var1[-c(outliers)]
+    var2 <- var2[-c(outliers)]
     ifelse(plotoutliers == TRUE,
-           addTxt <- sprintf("\n Outliers (n=%d) displayed in red", length(unique(outliers[[1]]))),
-           addTxt <- sprintf("\n Outliers (n=%d) not displayed", length(unique(outliers[[1]])))
+           addTxt <- sprintf("\n Outliers (n=%d) displayed in red", length(unique(outliers))),
+           addTxt <- sprintf("\n Outliers (n=%d) not displayed", length(unique(outliers)))
            )
     resTXT <- bquote(atop(.(corRes[[1]]), .(addTxt)))
   }
@@ -239,7 +251,7 @@ plot_correlation <- function(var1, var2, #required
           panel.grid.minor = element_blank()
           )
   # if asked to display, add outliers on the plot
-  if (length(outliers[[1]]) > 0 & plotoutliers == TRUE) {
+  if (length(outliers) > 0 & plotoutliers == TRUE) {
     corplot <- corplot + geom_point(data = outdata, aes(out1, out2), color = "red")
   }
   # if asked to show data info, add it to the plot caption
