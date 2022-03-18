@@ -176,7 +176,7 @@ plot_correlation <- function(var1, var2, #required
   pointsize = 1.8, txtsize = 11, # default point and font size
   outliers = NULL,
   plotoutliers = FALSE,
-  pthreshold = NULL
+  pthreshold = NULL,
   datainfo = FALSE) {
   # If outliers not given, get them
   if (is.null(outliers)) {
