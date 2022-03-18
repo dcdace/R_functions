@@ -40,9 +40,9 @@ packages_to_load <- c("ggplot2", "Hmisc", "aplpack", "mvnTest", "WRS2", "WRS", "
 invisible(lapply(packages_to_load, library, character.only = TRUE))
 
 # =======================================================
-# FUNCTION CHECK ASSUMPTIONS (for a variable pair, for correlations)
+# FUNCTION CHECK DATA (for outliers and normality)
 # =======================================================
-check_assumptions <- function(var1, var2, # required
+check_data <- function(var1, var2, # required
   var1name = "var1", var2name = "var2",
   var1ylab = "", var2ylab = "",
   disp = FALSE) {
@@ -104,33 +104,33 @@ check_assumptions <- function(var1, var2, # required
 
   # Return results
   # ------------------------------------
-  assumptions <- list()
-  assumptions$outliers_all <- c(oVar1, oVar2, oBiv)
-  assumptions$outliers_uni <- c(oVar1, oVar2)
-  assumptions$outliers_bi <- oBiv
-  assumptions$normality <- bvn@p.value > 0.05
+  data_check <- list()
+  data_check$outliers_all <- c(oVar1, oVar2, oBiv)
+  data_check$outliers_uni <- c(oVar1, oVar2)
+  data_check$outliers_bi <- oBiv
+  data_check$normality <- bvn@p.value > 0.05
 
-  return(assumptions)
+  return(data_check)
 }
 
 # =======================================================
 # FUNCTION DO CORRELATIONS
 # =======================================================
 # Depending on the data, 3 types of correlations possible. Following recommendations by Pernet et al.(2013)
-do_correlation <- function(var1, var2, assumptions = NULL) {
+do_correlation <- function(var1, var2, data_check = NULL) {
   corr_results <- list()
   datainfo <- list()
   i <- 0
-  # if assumptions not provided, get them
-  if (is.null(assumptions)) {
-    assumptions <- check_assumptions(var1, var2)
+  # if data check not provided, get them
+  if (is.null(data_check)) {
+    data_check <- check_data(var1, var2)
   }
   # WHICH CORRELATION
   # ------------------------------------
-  isOutliers <- length(assumptions$outliers_all) > 0
-  isUnivariate <- length(assumptions$outliers_uni) > 0
-  isBivariate <- length(assumptions$outliers_bi) > 0
-  isNormal <- assumptions$normality
+  isOutliers <- length(data_check$outliers_all) > 0
+  isUnivariate <- length(data_check$outliers_uni) > 0
+  isBivariate <- length(data_check$outliers_bi) > 0
+  isNormal <- data_check$normality
 
   # if is Bivariate do Spearman skipped, using the minimum covariance determinant (MCD) estimator
   if (isBivariate) {
@@ -188,30 +188,30 @@ do_correlation <- function(var1, var2, assumptions = NULL) {
 plot_correlation <- function(var1, var2, #required
   var1name = "var1", var2name = "var2", # axis lables
   corr_results = NULL,
-  assumptions = NULL,
+  data_check = NULL,
   pointsize = 1.8, txtsize = 11, # default point and font size
   plotoutliers = FALSE,
   pthreshold = NULL,
   datainfo = TRUE) {
-  # If assumptions not given, get them
-  if (is.null(assumptions)) {
-    assumptions <- check_assumptions(var1, var2)
+  # If data_check not given, get them
+  if (is.null(data_check)) {
+    data_check <- check_data(var1, var2)
   }
   # If correlation results not given, get them
   if (is.null(corr_results)) {
-    corr_results <- do_correlation(var1, var2, assumptions)
+    corr_results <- do_correlation(var1, var2, data_check)
   }
   # Format the output
-  if (length(assumptions$outliers_all) > 0) {
-    out1 <- var1[assumptions$outliers_all]
-    out2 <- var2[assumptions$outliers_all]
+  if (length(data_check$outliers_all) > 0) {
+    out1 <- var1[data_check$outliers_all]
+    out2 <- var2[data_check$outliers_all]
     outdata <- data.frame(out1, out2)
 
-    var1 <- var1[-c(assumptions$outliers_all)]
-    var2 <- var2[-c(assumptions$outliers_all)]
+    var1 <- var1[-c(data_check$outliers_all)]
+    var2 <- var2[-c(data_check$outliers_all)]
     ifelse(plotoutliers == TRUE,
-           addTxt <- sprintf("\n Outliers (n=%d) displayed in red", length(unique(assumptions$outliers_all))),
-           addTxt <- sprintf("\n Outliers (n=%d) not displayed", length(unique(assumptions$outliers_all)))
+           addTxt <- sprintf("\n Outliers (n=%d) displayed in red", length(unique(data_check$outliers_all))),
+           addTxt <- sprintf("\n Outliers (n=%d) not displayed", length(unique(data_check$outliers_all)))
            )
     corr_results$txt <- bquote(atop(.(corr_results$txt), .(addTxt)))
   }
@@ -249,7 +249,7 @@ plot_correlation <- function(var1, var2, #required
           panel.grid.minor = element_blank()
           )
   # if asked to display, add outliers on the plot
-  if (length(assumptions$outliers_all) > 0 & plotoutliers == TRUE) {
+  if (length(data_check$outliers_all) > 0 & plotoutliers == TRUE) {
     corplot <- corplot + geom_point(data = outdata, aes(out1, out2), color = "red")
   }
   # if asked to show data info, add it to the plot caption
