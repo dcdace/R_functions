@@ -162,7 +162,7 @@ do_correlation <- function(var1, var2, outliers = NULL) {
 
   pval <- ifelse(p < 0.001, "p < 0.001", sprintf("p = %.3f", p))
   corResTxt <- bquote(.(f) ~ "correlation" ~ r[.(subs)] == .(sprintf("%.3f, %s", r, pval)))
-  infotxt <- paste(infotxt1, infotxt2, infotxt3, infotxt4)
+  infotxt <- paste("Data:", infotxt1, infotxt2, infotxt3, infotxt4)
 
   return(list(corResTxt, p, infotxt))
 }
@@ -176,7 +176,8 @@ plot_correlation <- function(var1, var2, #required
   pointsize = 1.8, txtsize = 11, # default point and font size
   outliers = NULL,
   plotoutliers = FALSE,
-  pthreshold = NULL) {
+  pthreshold = NULL
+  datainfo = FALSE) {
   # If outliers not given, get them
   if (is.null(outliers)) {
     outliers <- get_outliers(var1, var2)
@@ -226,7 +227,7 @@ plot_correlation <- function(var1, var2, #required
       colour = "black", alpha = .8, fill = "orange",
       size = pointsize, stroke = 0.2, shape = 21
     ) +
-    labs(x = var1name, y = var2name, subtitle = resTXT, caption = corRes[[3]]) +
+    labs(x = var1name, y = var2name, subtitle = resTXT) +
     theme_minimal() +
     theme(text = element_text(size = txtsize),
           plot.title = element_text(hjust = 0.5, size = txtsize + 2, face = titleface, color = "black"),
@@ -238,6 +239,10 @@ plot_correlation <- function(var1, var2, #required
   # if asked to display, add outliers on the plot
   if (length(outliers[[1]]) > 0 & plotoutliers == TRUE) {
     corplot <- corplot + geom_point(data = outdata, aes(out1, out2), color = "red")
+  }
+  # if asked to show data info, add it to the plot caption
+  if (datainfo){
+    corplot <- corplot + labs(caption = corRes[[3]])
   }
   return(corplot)
 }
