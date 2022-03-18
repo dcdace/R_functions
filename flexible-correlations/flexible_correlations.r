@@ -179,7 +179,7 @@ plot_correlation <- function(var1, var2, #required
   outliers = NULL,
   plotoutliers = FALSE,
   pthreshold = NULL,
-  datainfo = FALSE) {
+  datainfo = TRUE) {
   # If outliers not given, get them
   if (is.null(outliers)) {
     outliers <- get_outliers(var1, var2)
