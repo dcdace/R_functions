@@ -107,7 +107,7 @@ get_outliers <-
 # Depending on the data, 3 types of correlations possible. Following recommendations by Pernet et al.(2013)
 do_correlation <- function(var1, var2, outliers = NULL) {
   infotxt <- list()
-  i <- 1
+  i <- 0
   # if outliers not provided, get them
   if (is.null(outliers)) {
     outliers <- get_outliers(var1, var2)
