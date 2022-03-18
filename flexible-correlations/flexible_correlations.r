@@ -162,7 +162,7 @@ do_correlation <- function(var1, var2, outliers = NULL) {
 
   pval <- ifelse(p < 0.001, "p < 0.001", sprintf("p = %.3f", p))
   corResTxt <- bquote(.(f) ~ "correlation" ~ r[.(subs)] == .(sprintf("%.3f, %s", r, pval)))
-  infotxt <- paste("Data:", infotxt1, infotxt2, infotxt3, infotxt4)
+  infotxt <- paste("Data:", infotxt1, infotxt2, infotxt3, infotxt4, collapse = ";")
 
   return(list(corResTxt, p, infotxt))
 }
